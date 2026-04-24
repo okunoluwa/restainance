@@ -1,4 +1,5 @@
-// register.js - Fully standalone, no conflicts
+// register.js - Only STUDENTS need Student Number, Residence, and Room Number
+// Staff and Admin can register without those fields
 
 // Dark mode toggle
 function initDarkMode() {
@@ -62,8 +63,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const studentNumberInput = document.getElementById('studentNumber');
     
     // Validate required fields exist
-    if (!fullnameInput || !emailInput || !passwordInput || !roleSelect || !studentNumberInput) {
-        console.error('Missing required form fields. Check IDs: fullname, email, password, role, studentNumber');
+    if (!fullnameInput || !emailInput || !passwordInput || !roleSelect) {
+        console.error('Missing required form fields. Check IDs: fullname, email, password, role');
         alert('Form is missing required fields. Please check the HTML.');
         return;
     }
@@ -79,15 +80,18 @@ document.addEventListener('DOMContentLoaded', function() {
         const role = roleSelect.value;
         const residence = residenceInput ? residenceInput.value.trim() : '';
         const room = roomInput ? roomInput.value.trim() : '';
-        const studentNumber = studentNumberInput.value.trim();
+        const studentNumber = studentNumberInput ? studentNumberInput.value.trim() : '';
         
-        // Validation
+        // ========== VALIDATION ==========
+        
+        // 1. Full Name validation (ALL roles)
         if (!fullname) {
             alert('Please enter your full name.');
             fullnameInput.focus();
             return;
         }
         
+        // 2. Email validation (ALL roles)
         if (!email) {
             alert('Please enter your email.');
             emailInput.focus();
@@ -101,6 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
+        // 3. Password validation (ALL roles)
         if (!password) {
             alert('Please enter a password.');
             passwordInput.focus();
@@ -113,32 +118,64 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        if (!studentNumber) {
-            alert('Please enter your student number.');
-            studentNumberInput.focus();
-            return;
+        // 4. STUDENT-SPECIFIC VALIDATIONS (Student Number, Residence, Room)
+        if (role === 'student') {
+            // Student Number is required for students only
+            if (!studentNumber) {
+                alert('Student Number is required for student registration.');
+                if (studentNumberInput) studentNumberInput.focus();
+                return;
+            }
+            
+            // Residence is required for students only
+            if (!residence) {
+                alert('Residence is required for student registration. Please enter your residence.');
+                if (residenceInput) residenceInput.focus();
+                return;
+            }
+            
+            // Room number is required for students only
+            if (!room) {
+                alert('Room number is required for student registration. Please enter your room number.');
+                if (roomInput) roomInput.focus();
+                return;
+            }
         }
         
-        // Create user object
+        // Staff and Admin do NOT need Student Number, Residence, or Room validation
+        // They can leave those fields empty
+        
+        // ========== CREATE USER OBJECT ==========
         const user = {
             fullname: fullname,
             email: email,
             password: password,
             role: role,
-            residence: residence,
-            room: room,
-            studentNumber: studentNumber,
+            residence: (role === 'student') ? residence : '',
+            room: (role === 'student') ? room : '',
+            studentNumber: (role === 'student') ? studentNumber : '',
             registeredDate: new Date().toLocaleString()
         };
         
-        // Save to localStorage
+        // ========== SAVE TO LOCALSTORAGE ==========
         localStorage.setItem('user', JSON.stringify(user));
         
-        // Also store student number for later use (consistency with other pages)
-        localStorage.setItem('studentNumber', studentNumber);
-        localStorage.setItem('currentStudentNumber', studentNumber);
-        localStorage.setItem('reportStudentNumber', studentNumber);
+        // Only store student number in separate fields if user is a student
+        if (role === 'student') {
+            localStorage.setItem('studentNumber', studentNumber);
+            localStorage.setItem('currentStudentNumber', studentNumber);
+            localStorage.setItem('reportStudentNumber', studentNumber);
+        } else {
+            // Clear any existing student number data for staff/admin
+            localStorage.removeItem('studentNumber');
+            localStorage.removeItem('currentStudentNumber');
+            localStorage.removeItem('reportStudentNumber');
+        }
         
+        // Store role for quick access
+        localStorage.setItem('userRole', role);
+        
+        // ========== SUCCESS & REDIRECT ==========
         alert('Registration successful!');
         
         // Redirect based on role
@@ -146,10 +183,12 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = 'student-dashboard.html';
         } else if (role === 'staff') {
             window.location.href = 'staff-dashboard.html';
-        } else {
+        } else if (role === 'admin') {
             window.location.href = 'admin-dashboard.html';
+        } else {
+            window.location.href = 'student-dashboard.html';
         }
     });
     
-    console.log('Registration form ready.');
+    console.log('Registration form ready. Only students need Student Number, Residence, and Room Number.');
 });

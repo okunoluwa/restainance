@@ -73,4 +73,39 @@ window.updateStatus = updateStatus;
 document.addEventListener("DOMContentLoaded", function() {
     initDarkMode();
     renderRequests();
+    
+    // ===== ADDED: Display admin name on dashboard =====
+    (function displayAdminName() {
+        const userData = localStorage.getItem('user');
+        // Check if welcome div exists, if not create it
+        let welcomeDiv = document.getElementById('adminWelcome');
+        if (!welcomeDiv) {
+            const main = document.querySelector('.main');
+            const h1 = main?.querySelector('h1');
+            if (main && h1) {
+                const div = document.createElement('div');
+                div.id = 'adminWelcome';
+                div.style.cssText = 'margin-bottom: 20px; padding: 15px 20px; background: #e8f5e9; border-radius: 15px; color: #2e7d32; font-weight: 500;';
+                div.innerHTML = 'Loading...';
+                h1.insertAdjacentElement('afterend', div);
+                welcomeDiv = div;
+            }
+        }
+        
+        if (userData && welcomeDiv) {
+            try {
+                const user = JSON.parse(userData);
+                if (user && user.fullname) {
+                    welcomeDiv.innerHTML = '👋 Welcome back, <strong style="color: #af954c;">' + user.fullname + '</strong>! You have full admin access.';
+                } else {
+                    welcomeDiv.innerHTML = '👋 Welcome, Admin!';
+                }
+            } catch(e) {
+                welcomeDiv.innerHTML = '👋 Welcome, Admin!';
+            }
+        } else if (welcomeDiv) {
+            welcomeDiv.innerHTML = '👋 Welcome, Admin!';
+        }
+    })();
+    // ===== END OF ADDED CODE =====
 });

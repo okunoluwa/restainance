@@ -243,4 +243,39 @@ document.addEventListener("DOMContentLoaded", function() {
     addExportButton();
     addCalendarButton();
     renderRequests();
+    
+    // ===== ADDED: Display staff name on dashboard =====
+    (function displayStaffName() {
+        const userData = localStorage.getItem('user');
+        // Check if welcome div exists, if not create it
+        let welcomeDiv = document.getElementById('staffWelcome');
+        if (!welcomeDiv) {
+            const main = document.querySelector('.main');
+            const h1 = main?.querySelector('h1');
+            if (main && h1) {
+                const div = document.createElement('div');
+                div.id = 'staffWelcome';
+                div.style.cssText = 'margin-bottom: 20px; padding: 15px 20px; background: #e3f2fd; border-radius: 15px; color: #1565c0; font-weight: 500;';
+                div.innerHTML = 'Loading...';
+                h1.insertAdjacentElement('afterend', div);
+                welcomeDiv = div;
+            }
+        }
+        
+        if (userData && welcomeDiv) {
+            try {
+                const user = JSON.parse(userData);
+                if (user && user.fullname) {
+                    welcomeDiv.innerHTML = '👋 Welcome back, <strong style="color: #af954c;">' + user.fullname + '</strong>! You can manage maintenance requests here.';
+                } else {
+                    welcomeDiv.innerHTML = '👋 Welcome, Staff Member!';
+                }
+            } catch(e) {
+                welcomeDiv.innerHTML = '👋 Welcome, Staff Member!';
+            }
+        } else if (welcomeDiv) {
+            welcomeDiv.innerHTML = '👋 Welcome, Staff Member!';
+        }
+    })();
+    // ===== END OF ADDED CODE =====
 });
