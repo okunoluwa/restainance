@@ -119,6 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // 4. STUDENT-SPECIFIC VALIDATIONS (Student Number, Residence, Room)
+        // These are ONLY required if role is 'student'
         if (role === 'student') {
             // Student Number is required for students only
             if (!studentNumber) {
