@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Issue - Restainance</title>
+    <link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h2>Restainance</h2>
+        <ul>
+            <li><a href="student-dashboard.html">Dashboard</a></li>
+            <li class="active"><a href="report.html">Report Issue</a></li>
+            <li><a href="my-requests.html">My Requests</a></li>
+            <li><a href="login.html">Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+        <h1>Report Maintenance Issue 🛠️</h1>
+
+        <form id="reportForm">
+            <div class="form-group">
+                <label>Issue Title</label>
+                <input type="text" id="title" name="title" placeholder="e.g., Broken light, Leaking faucet" required>
+            </div>
+
+            <div class="form-group">
+                <label>Category</label>
+                <select id="category" name="category" required>
+                    <option value="">-- Select Category --</option>
+                    <option value="Plumbing">💧 Plumbing</option>
+                    <option value="Electrical">⚡ Electrical</option>
+                    <option value="Furniture">🪑 Furniture</option>
+                    <option value="Cleaning">🧹 Cleaning</option>
+                    <option value="HVAC">❄️ HVAC/Air Conditioning</option>
+                    <option value="Other">🔧 Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Room Number</label>
+                <input type="text" id="roomNumber" name="roomNumber" placeholder="e.g., 204" required>
+            </div>
+
+            <div class="form-group">
+                <label>Student Number</label>
+                <input type="text" id="studentNumber" name="studentNumber" placeholder="e.g., 202400123" required>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="description" name="description" rows="4" placeholder="Please describe the issue in detail..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Upload Image (Optional)</label>
+                <input type="file" id="image" name="image" accept="image/*">
+                <small>Max size: 2MB. Supported formats: JPG, PNG, GIF</small>
+            </div>
+
+            <button type="submit" id="submitBtn">✅ Submit Request</button>
+        </form>
+    </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2026 Restainance | Student Residence Maintenance App</p>
+</footer>
+
+<script src="report.js"></script>
+</body>
+</html>

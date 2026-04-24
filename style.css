@@ -1,0 +1,253 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background: #f5f5f5;
+    transition: background 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+    background: #121212;
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: white;
+    position: sticky;
+    top: 0;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    z-index: 100;
+    transition: background 0.3s;
+}
+
+body.dark-mode .navbar {
+    background: #1e1e2e;
+}
+
+.logo {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #af954c;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.nav-links a {
+    color: #333;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.3s;
+}
+
+body.dark-mode .nav-links a {
+    color: #ddd;
+}
+
+.btn {
+    background: #af954c;
+    padding: 8px 18px;
+    border-radius: 30px;
+    color: white !important;
+    font-weight: 600;
+}
+
+/* HERO */
+.hero {
+    min-height: 60vh;
+    background: linear-gradient(135deg, #af954c, #7d702e);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 50px 20px;
+}
+
+body.dark-mode .hero {
+    background: linear-gradient(135deg, #0f3460, #1a1a2e);
+}
+
+.hero h1 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 1rem;
+    margin: 15px 0;
+    line-height: 1.5;
+}
+
+.cta {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 14px 35px;
+    background: white;
+    color: #af954c;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+}
+
+.cta:active {
+    transform: scale(0.96);
+}
+
+body.dark-mode .cta {
+    background: #1e1e2e;
+    color: #af954c;
+}
+
+/* FEATURES */
+.features {
+    padding: 50px 20px;
+    text-align: center;
+    background: white;
+    transition: background 0.3s;
+}
+
+body.dark-mode .features {
+    background: #1a1a2e;
+}
+
+.features h2 {
+    font-size: 1.6rem;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+body.dark-mode .features h2 {
+    color: #eee;
+}
+
+.feature-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.feature {
+    background: #f8f9fa;
+    padding: 25px 20px;
+    border-radius: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+
+body.dark-mode .feature {
+    background: #1e1e2e;
+}
+
+.feature:active {
+    transform: scale(0.98);
+}
+
+.feature h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #af954c;
+}
+
+.feature p {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+body.dark-mode .feature p {
+    color: #aaa;
+}
+
+/* CTA SECTION */
+.cta-section {
+    background: linear-gradient(135deg, #7d6d2e, #5c5020);
+    color: white;
+    text-align: center;
+    padding: 50px 20px;
+}
+
+body.dark-mode .cta-section {
+    background: linear-gradient(135deg, #0f3460, #0a1a2e);
+}
+
+.cta-section h2 {
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+}
+
+/* FOOTER */
+footer {
+    background: white;
+    color: #888;
+    text-align: center;
+    padding: 20px;
+    font-size: 0.75rem;
+    transition: background 0.3s;
+}
+
+body.dark-mode footer {
+    background: #1e1e2e;
+    color: #666;
+}
+
+/* DARK MODE TOGGLE */
+.dark-mode-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #af954c;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 200;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+}
+
+body.dark-mode .dark-mode-toggle {
+    background: #0f3460;
+}
+
+.dark-mode-toggle:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+@media (min-width: 768px) {
+    .hero h1 { font-size: 3rem; }
+    .hero p { font-size: 1.2rem; }
+    .feature-container {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+        max-width: none;
+    }
+    .feature { width: 280px; }
+    .dark-mode-toggle { top: 20px; right: 20px; bottom: auto; }
+}
+
+@media (max-width: 480px) {
+    .navbar { flex-direction: column; gap: 10px; }
+    .hero h1 { font-size: 1.6rem; }
+}

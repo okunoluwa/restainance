@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Restainance</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="form-box">
+        <h2>Welcome Back</h2>
+
+        <form>
+
+            <label>Email</label>
+            <input type="email" placeholder="Enter your email" required>
+
+            <label>Password</label>
+            <div class="password-box">
+                <input type="password" id="password" placeholder="Enter password" required>
+                <span onclick="togglePassword()">👁️</span>
+            </div>
+            
+            <label>Role</label>
+            <select id="role" onchange="toggleFields()">
+                <option value="student">Student</option>
+                <option value="staff">Admin</option>
+                <option value="admin">Super Admin</option>
+            </select>
+
+            <div class="options">
+                <label>
+                    <input type="checkbox"> Remember Me
+                </label>
+                <a href="forgetpasword.html">Forgot Password?</a>
+            </div>
+
+            <button type="submit">Login</button>
+
+        </form>
+
+        <p>Don't have an account? <a href="registration.html">Register</a></p>
+    </div>
+
+</div>
+
+<script src="login.js"></script>
+</body>
+</html>

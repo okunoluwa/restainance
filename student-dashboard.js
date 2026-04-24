@@ -1,0 +1,183 @@
+let currentStudentNumber = null;
+
+function getRequests() {
+    return JSON.parse(localStorage.getItem("requests")) || [];
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+// Dark mode
+function initDarkMode() {
+    if (document.querySelector('.dark-mode-toggle')) return;
+    
+    const btn = document.createElement('button');
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    btn.innerHTML = isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode';
+    btn.className = 'dark-mode-toggle';
+    btn.onclick = () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+        btn.innerHTML = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+    };
+    
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+    }
+    
+    document.body.appendChild(btn);
+}
+
+// Get student number
+function getCurrentStudent() {
+    let studentNumber = localStorage.getItem('studentNumber');
+    if (!studentNumber) {
+        studentNumber = prompt('🔐 Enter your student number:');
+        if (studentNumber) {
+            studentNumber = studentNumber.trim();
+            localStorage.setItem('studentNumber', studentNumber);
+        }
+    }
+    return studentNumber;
+}
+
+// Search
+function filterRequests() {
+    const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
+    const cards = document.querySelectorAll('.request-card');
+    cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(searchTerm) ? 'block' : 'none';
+    });
+}
+
+function addSearchBar() {
+    const topBar = document.querySelector('.top-bar');
+    if (!topBar || document.getElementById('searchInput')) return;
+    
+    const searchDiv = document.createElement('div');
+    searchDiv.style.margin = '15px 0';
+    searchDiv.innerHTML = '<input type="text" id="searchInput" placeholder="🔍 Search your requests..." style="width:100%; padding:12px; border-radius:30px; border:1px solid #ddd; font-size:16px;">';
+    topBar.insertAdjacentElement('afterend', searchDiv);
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.addEventListener('keyup', filterRequests);
+}
+
+// Export PDF
+function exportToPDF() {
+    const requests = getRequests();
+    const myRequests = requests.filter(req => req.studentNumber === currentStudentNumber);
+    
+    let html = `<html><head><title>My Requests</title></head><body>
+        <h1>My Maintenance Requests</h1>
+        <p>Student: ${escapeHtml(currentStudentNumber)}</p>
+        <p>Generated: ${new Date().toLocaleString()}</p>
+        <table border="1" cellpadding="5">
+            <tr><th>Title</th><th>Room</th><th>Status</th><th>Date</th></tr>
+            ${myRequests.map(r => `<tr><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.room)}</td><td>${r.status}</td><td>${r.date}</td>`).join('')}
+        </table></body></html>`;
+    
+    const blob = new Blob([html], { type: 'application/pdf' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `my-requests-${currentStudentNumber}.pdf`;
+    link.click();
+    alert('✅ PDF exported!');
+}
+
+function addExportButton() {
+    const topBar = document.querySelector('.top-bar');
+    if (!topBar || document.querySelector('.export-btn')) return;
+    
+    const btn = document.createElement('button');
+    btn.innerHTML = '📄 Export PDF';
+    btn.className = 'export-btn';
+    btn.style.cssText = 'background:#4caf50; color:white; border:none; border-radius:30px; padding:10px 18px; margin-left:10px; cursor:pointer;';
+    btn.onclick = exportToPDF;
+    const reportBtn = topBar.querySelector('button:first-of-type');
+    if (reportBtn) reportBtn.insertAdjacentElement('afterend', btn);
+}
+
+// Stats
+function updateStats(requests) {
+    const myRequests = requests.filter(req => req.studentNumber === currentStudentNumber);
+    const totalEl = document.querySelector('.card:first-child p');
+    const pendingEl = document.querySelector('.card:nth-child(2) p');
+    const completedEl = document.querySelector('.card:nth-child(3) p');
+    if (totalEl) totalEl.innerHTML = myRequests.length;
+    if (pendingEl) pendingEl.innerHTML = myRequests.filter(r => r.status === 'pending').length;
+    if (completedEl) completedEl.innerHTML = myRequests.filter(r => r.status === 'completed').length;
+}
+
+// Load requests
+function loadRecentRequests() {
+    const requests = getRequests();
+    const myRequests = requests.filter(req => req.studentNumber === currentStudentNumber);
+    const recentRequests = [...myRequests].reverse().slice(0, 5);
+    
+    const requestsSection = document.querySelector('.requests');
+    if (!requestsSection) return;
+    
+    // Remove old cards but keep the h2
+    const oldCards = requestsSection.querySelectorAll('.request-card');
+    oldCards.forEach(card => card.remove());
+    
+    if (recentRequests.length === 0) {
+        const emptyDiv = document.createElement('div');
+        emptyDiv.className = 'request-card';
+        emptyDiv.style.textAlign = 'center';
+        emptyDiv.innerHTML = '📭 No requests yet. <a href="report.html">Report an issue</a>';
+        requestsSection.appendChild(emptyDiv);
+    } else {
+        recentRequests.forEach(request => {
+            const priorityColor = request.priority === 'High' ? '#dc3545' : (request.priority === 'Low' ? '#4caf50' : '#ff9800');
+            const card = document.createElement('div');
+            card.className = 'request-card';
+            card.innerHTML = `
+                <h3>${escapeHtml(request.title)} ${request.priority ? `<span style="background:${priorityColor}; color:white; padding:2px 10px; border-radius:20px; font-size:10px;">${request.priority}</span>` : ''}</h3>
+                <p>Room: ${escapeHtml(request.room)}</p>
+                <p>Category: ${escapeHtml(request.category) || 'General'}</p>
+                <p>Submitted: ${request.date}</p>
+                <span class="status ${request.status}">${request.status.toUpperCase()}</span>
+                <div style="margin-top:10px"><button onclick="location.href='my-requests.html'" style="background:#af954c; color:white; border:none; border-radius:30px; padding:10px 15px; cursor:pointer;">View Details</button></div>
+            `;
+            requestsSection.appendChild(card);
+        });
+    }
+    updateStats(requests);
+}
+
+function goToReport() {
+    window.location.href = 'report.html';
+}
+
+// Make function global
+window.goToReport = goToReport;
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    initDarkMode();
+    currentStudentNumber = getCurrentStudent();
+    if (!currentStudentNumber) {
+        const main = document.querySelector('.main');
+        if (main) {
+            main.innerHTML = '<h1>Access Denied</h1><p>Student number required.</p><a href="login.html" class="btn-primary">Login</a>';
+        }
+        return;
+    }
+    const welcomeHeader = document.querySelector('.top-bar h1');
+    if (welcomeHeader) welcomeHeader.innerHTML = `Welcome 👋 ${escapeHtml(currentStudentNumber)}`;
+    addSearchBar();
+    addExportButton();
+    loadRecentRequests();
+    // Auto-refresh every 10 seconds
+    setInterval(loadRecentRequests, 10000);
+});

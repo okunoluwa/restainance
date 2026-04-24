@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Restainance</title>
+    <link rel="stylesheet" href="student-dashboard.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h2>Restainance</h2>
+
+        <ul>
+            <li class="active"><a href="student-dashboard.html">Dashboard</a></li>
+            <li><a href="report.html">Report Issue</a></li>
+            <li><a href="my-requests.html">My Requests</a></li>
+            <li><a href="login.html">Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <!-- TOP HEADER -->
+        <div class="top-bar">
+            <h1>Welcome 👋 Student</h1>
+            <button onclick="goToReport()">+ Report Issue</button>
+        </div>
+
+        <!-- Add this search bar -->
+        <div style="margin: 15px 0;">
+            <input type="text" id="searchInput" placeholder="🔍 Search your requests..." 
+            style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px;">
+        </div>
+
+        <!-- STATS -->
+        <section class="stats">
+            <div class="card">
+                <h3>Total Requests</h3>
+                <p>--</p>
+            </div>
+
+            <div class="card">
+                <h3>Pending</h3>
+                <p>--</p>
+            </div>
+
+            <div class="card">
+                <h3>Completed</h3>
+                <p>--</p>
+            </div>
+        </section>
+
+        <!-- REQUEST SECTION -->
+        <section class="requests">
+
+            <h2>Recent Requests</h2>
+
+            <div class="request-card">
+                <h3>Broken Light</h3>
+                <p>Room: 102</p>
+                <span class="status pending">Pending</span>
+            </div>
+
+            <div class="request-card">
+                <h3>Water Leak</h3>
+                <p>Room: 204</p>
+                <span class="status completed">Completed</span>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2026 Restainance | Student Residence Maintenance App</p>
+</footer>
+
+<script src="student-dashboard.js"></script>
+</body>
+</html>

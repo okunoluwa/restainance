@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Restainance</title>
+    <link rel="stylesheet" href="register.css">
+</head>
+<body>
+<div class="container">
+    <div class="form-box">
+        <h2>Create Account</h2>
+        <form>
+            <label>Full Name</label>
+            <input type="text" id="fullname" placeholder="Enter your name">
+
+            <label>Email</label>
+            <input type="email" id="email" placeholder="your@email.com">
+
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Create password">
+
+            <label>Role</label>
+            <select id="role">
+                <option value="student">Student</option>
+                <option value="staff">admin</option>
+                <option value="admin">Super Admin</option>
+            </select>
+
+            <label>Residence</label>
+            <input type="text" id="residence" placeholder="e.g Block A">
+
+            <label>Room Number</label>
+            <input type="text" id="room" placeholder="e.g 204">
+
+            <label>Student Number</label>
+            <input type="text" id="studentNumber" placeholder="Enter your student number">
+
+            <button type="submit">Register</button>
+            <p>Already have an account? <a href="login.html">Login</a></p>
+        </form>
+    </div>
+</div>
+
+<script src="register.js"></script>
+</body>
+</html>
