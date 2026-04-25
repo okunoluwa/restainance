@@ -52,8 +52,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('✅ All form elements found successfully!');
     
+    // Get student info from localStorage
+    let studentName = localStorage.getItem('studentName') || '';
+    let studentNumber = localStorage.getItem('studentNumber') || '';
+    
     // Check for stored student number
-    let currentStudentNumber = sessionStorage.getItem('reportStudentNumber');
+    let currentStudentNumber = sessionStorage.getItem('reportStudentNumber') || studentNumber;
     
     if (!currentStudentNumber) {
         // Ask for student number if not already stored
@@ -79,15 +83,30 @@ document.addEventListener('DOMContentLoaded', function() {
     studentNumberInput.style.backgroundColor = '#f0f0f0';
     studentNumberInput.style.cursor = 'not-allowed';
     
+    // Get student name from user object if not already available
+    if (!studentName) {
+        const userData = localStorage.getItem('user');
+        if (userData) {
+            try {
+                const user = JSON.parse(userData);
+                if (user && user.fullname && user.role === 'student') {
+                    studentName = user.fullname;
+                    localStorage.setItem('studentName', studentName);
+                }
+            } catch(e) {}
+        }
+    }
+    
     // Add a helpful message at the top showing who is reporting
     const mainContainer = document.querySelector('.main');
     if (mainContainer && !document.querySelector('.user-info-banner')) {
         const userBanner = document.createElement('div');
         userBanner.className = 'user-info-banner';
+        const displayName = studentName || currentStudentNumber;
         userBanner.innerHTML = `
             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <i class="fas fa-user-graduate"></i> <strong>Reporting as Student:</strong> ${escapeHtml(currentStudentNumber)}
+                    <i class="fas fa-user-graduate"></i> <strong>Reporting as Student:</strong> ${escapeHtml(displayName)} (${escapeHtml(currentStudentNumber)})
                 </div>
                 <div>
                     <a href="my-requests.html" style="color: white; text-decoration: none; background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 5px;"><i class="fas fa-arrow-left"></i> View My Requests</a>
@@ -173,6 +192,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
+        // Get student name for the request
+        const studentFullName = localStorage.getItem('studentName') || studentName || `Student ${studentNumber}`;
+        
         // Create the request object
         const newRequest = {
             id: Date.now(),
@@ -181,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
             room: roomNumber,
             roomNumber: roomNumber,
             studentNumber: studentNumber,
-            studentName: `Student ${studentNumber}`,
+            studentName: studentFullName,
             description: description,
             status: 'pending',
             date: new Date().toLocaleString(),
@@ -267,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             
             reader.onerror = function() {
-                alert('<i class="fas fa-times-circle"></i> Error reading image file. Please try again.');
+                alert('Error reading image file. Please try again.');
                 if (submitBtn) {
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
@@ -287,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 studentNumberInput.value = currentStudentNumber;
                 studentNumberInput.readOnly = true;
             } else {
-                alert(' Failed to save request. Please try again.');
+                alert('Failed to save request. Please try again.');
             }
         }
     });

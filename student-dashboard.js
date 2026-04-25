@@ -1,4 +1,5 @@
 let currentStudentNumber = null;
+let currentStudentName = null;
 
 function getRequests() {
     return JSON.parse(localStorage.getItem("requests")) || [];
@@ -36,8 +37,39 @@ function initDarkMode() {
     document.body.appendChild(btn);
 }
 
-// Get student number
+// Get current logged in user info
+function getCurrentUser() {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+        try {
+            const user = JSON.parse(userData);
+            return user;
+        } catch(e) {
+            return null;
+        }
+    }
+    return null;
+}
+
+// Get student number and name
 function getCurrentStudent() {
+    // First try to get from user object
+    const user = getCurrentUser();
+    
+    if (user && user.role === 'student') {
+        if (user.studentNumber) {
+            currentStudentNumber = user.studentNumber;
+        }
+        if (user.fullname) {
+            currentStudentName = user.fullname;
+        }
+        // Store for quick access
+        localStorage.setItem('studentNumber', currentStudentNumber);
+        localStorage.setItem('studentName', currentStudentName);
+        return currentStudentNumber;
+    }
+    
+    // Fallback to localStorage
     let studentNumber = localStorage.getItem('studentNumber');
     if (!studentNumber) {
         studentNumber = prompt('Enter your student number:');
@@ -46,6 +78,18 @@ function getCurrentStudent() {
             localStorage.setItem('studentNumber', studentNumber);
         }
     }
+    
+    // Try to get name from stored user
+    const storedName = localStorage.getItem('studentName');
+    if (storedName) {
+        currentStudentName = storedName;
+    } else if (user && user.fullname) {
+        currentStudentName = user.fullname;
+        localStorage.setItem('studentName', currentStudentName);
+    } else {
+        currentStudentName = currentStudentNumber;
+    }
+    
     return studentNumber;
 }
 
@@ -80,7 +124,8 @@ function exportToPDF() {
     
     let html = `<html><head><title>My Requests</title></head><body>
         <h1>My Maintenance Requests</h1>
-        <p>Student: ${escapeHtml(currentStudentNumber)}</p>
+        <p>Student Name: ${escapeHtml(currentStudentName || currentStudentNumber)}</p>
+        <p>Student Number: ${escapeHtml(currentStudentNumber)}</p>
         <p>Generated: ${new Date().toLocaleString()}</p>
         <table border="1" cellpadding="5">
             <tr><th>Title</th><th>Room</th><th>Status</th><th>Date</th></tr>
@@ -167,7 +212,12 @@ window.goToReport = goToReport;
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
     initDarkMode();
+    
+    // Get user info first
+    const user = getCurrentUser();
+    
     currentStudentNumber = getCurrentStudent();
+    
     if (!currentStudentNumber) {
         const main = document.querySelector('.main');
         if (main) {
@@ -175,8 +225,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         return;
     }
+    
     const welcomeHeader = document.querySelector('.top-bar h1');
-    if (welcomeHeader) welcomeHeader.innerHTML = `<i class="fas fa-user-graduate"></i> Welcome ${escapeHtml(currentStudentNumber)}`;
+    if (welcomeHeader) {
+        // Display full name if available, otherwise student number
+        const displayName = currentStudentName || (user && user.fullname) || currentStudentNumber;
+        welcomeHeader.innerHTML = `<i class="fas fa-user-graduate"></i> Welcome ${escapeHtml(displayName)}`;
+    }
+    
     addSearchBar();
     addExportButton();
     loadRecentRequests();
