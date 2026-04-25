@@ -20,13 +20,13 @@ function initDarkMode() {
     
     const btn = document.createElement('button');
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    btn.innerHTML = isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode';
+    btn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
     btn.className = 'dark-mode-toggle';
     btn.onclick = () => {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
         localStorage.setItem('darkMode', isDark);
-        btn.innerHTML = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+        btn.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
     };
     
     if (isDarkMode) {
@@ -40,7 +40,7 @@ function initDarkMode() {
 function getCurrentStudent() {
     let studentNumber = localStorage.getItem('studentNumber');
     if (!studentNumber) {
-        studentNumber = prompt('🔐 Enter your student number:');
+        studentNumber = prompt('Enter your student number:');
         if (studentNumber) {
             studentNumber = studentNumber.trim();
             localStorage.setItem('studentNumber', studentNumber);
@@ -60,6 +60,8 @@ function filterRequests() {
 }
 
 function addSearchBar() {
+    const main = document.querySelector('.main');
+    if (!main) return;
     const topBar = document.querySelector('.top-bar');
     if (!topBar || document.getElementById('searchInput')) return;
     
@@ -90,7 +92,7 @@ function exportToPDF() {
     link.href = URL.createObjectURL(blob);
     link.download = `my-requests-${currentStudentNumber}.pdf`;
     link.click();
-    alert('✅ PDF exported!');
+    alert('PDF exported!');
 }
 
 function addExportButton() {
@@ -98,7 +100,7 @@ function addExportButton() {
     if (!topBar || document.querySelector('.export-btn')) return;
     
     const btn = document.createElement('button');
-    btn.innerHTML = '📄 Export PDF';
+    btn.innerHTML = '<i class="fas fa-file-pdf"></i> Export PDF';
     btn.className = 'export-btn';
     btn.style.cssText = 'background:#4caf50; color:white; border:none; border-radius:30px; padding:10px 18px; margin-left:10px; cursor:pointer;';
     btn.onclick = exportToPDF;
@@ -134,7 +136,7 @@ function loadRecentRequests() {
         const emptyDiv = document.createElement('div');
         emptyDiv.className = 'request-card';
         emptyDiv.style.textAlign = 'center';
-        emptyDiv.innerHTML = '📭 No requests yet. <a href="report.html">Report an issue</a>';
+        emptyDiv.innerHTML = '<i class="fas fa-inbox"></i> No requests yet. <a href="report.html">Report an issue</a>';
         requestsSection.appendChild(emptyDiv);
     } else {
         recentRequests.forEach(request => {
@@ -142,12 +144,12 @@ function loadRecentRequests() {
             const card = document.createElement('div');
             card.className = 'request-card';
             card.innerHTML = `
-                <h3>${escapeHtml(request.title)} ${request.priority ? `<span style="background:${priorityColor}; color:white; padding:2px 10px; border-radius:20px; font-size:10px;">${request.priority}</span>` : ''}</h3>
-                <p>Room: ${escapeHtml(request.room)}</p>
-                <p>Category: ${escapeHtml(request.category) || 'General'}</p>
-                <p>Submitted: ${request.date}</p>
+                <h3><i class="fas fa-wrench"></i> ${escapeHtml(request.title)} ${request.priority ? `<span style="background:${priorityColor}; color:white; padding:2px 10px; border-radius:20px; font-size:10px;">${request.priority}</span>` : ''}</h3>
+                <p><i class="fas fa-door-open"></i> Room: ${escapeHtml(request.room)}</p>
+                <p><i class="fas fa-tag"></i> Category: ${escapeHtml(request.category) || 'General'}</p>
+                <p><i class="fas fa-calendar-alt"></i> Submitted: ${request.date}</p>
                 <span class="status ${request.status}">${request.status.toUpperCase()}</span>
-                <div style="margin-top:10px"><button onclick="location.href='my-requests.html'" style="background:#af954c; color:white; border:none; border-radius:30px; padding:10px 15px; cursor:pointer;">View Details</button></div>
+                <div style="margin-top:10px"><button onclick="location.href='my-requests.html'" style="background:#af954c; color:white; border:none; border-radius:30px; padding:10px 15px; cursor:pointer;"><i class="fas fa-eye"></i> View Details</button></div>
             `;
             requestsSection.appendChild(card);
         });
@@ -174,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     const welcomeHeader = document.querySelector('.top-bar h1');
-    if (welcomeHeader) welcomeHeader.innerHTML = `Welcome 👋 ${escapeHtml(currentStudentNumber)}`;
+    if (welcomeHeader) welcomeHeader.innerHTML = `<i class="fas fa-user-graduate"></i> Welcome ${escapeHtml(currentStudentNumber)}`;
     addSearchBar();
     addExportButton();
     loadRecentRequests();

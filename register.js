@@ -8,7 +8,7 @@ function initDarkMode() {
     
     const btn = document.createElement('button');
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    btn.innerHTML = isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode';
+    btn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
     btn.className = 'dark-mode-toggle';
     btn.style.cssText = 'position:fixed; top:20px; right:20px; background:rgba(255,255,255,0.9); color:#333; border:none; border-radius:50px; padding:10px 18px; font-size:13px; font-weight:600; cursor:pointer; z-index:200; box-shadow:0 2px 10px rgba(0,0,0,0.1);';
     
@@ -16,7 +16,7 @@ function initDarkMode() {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
         localStorage.setItem('darkMode', isDark);
-        btn.innerHTML = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+        btn.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
         // Update button style for dark mode
         if (isDark) {
             btn.style.background = '#1e1e2e';
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('form');
     if (!form) {
         console.error('Registration form not found!');
-        alert('Form not found. Please check your HTML.');
+        alert('>Form not found. Please check your HTML.');
         return;
     }
     
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 3. Password validation (ALL roles)
         if (!password) {
-            alert('Please enter a password.');
+            alert(' Please enter a password.');
             passwordInput.focus();
             return;
         }

@@ -13,13 +13,13 @@ function initDarkMode() {
     if (document.querySelector('.dark-mode-toggle')) return;
     const btn = document.createElement('button');
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    btn.innerHTML = isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode';
+    btn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
     btn.className = 'dark-mode-toggle';
     btn.onclick = () => {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
         localStorage.setItem('darkMode', isDark);
-        btn.innerHTML = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+        btn.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
     };
     if (isDarkMode) document.body.classList.add('dark-mode');
     document.body.appendChild(btn);
@@ -105,14 +105,14 @@ function exportToPDF() {
         <p>Generated: ${new Date().toLocaleString()}</p>
         <table border="1" cellpadding="5" cellspacing="0">
             <tr><th>ID</th><th>Title</th><th>Student</th><th>Room</th><th>Status</th><th>Priority</th><th>Date</th></tr>
-            ${requests.map(r => `<tr><td>${r.id}</td><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.studentNumber)}</td><td>${escapeHtml(r.room)}</td><td>${r.status}</td><td>${r.priority || 'Medium'}</td><td>${r.date}</td></tr>`).join('')}
+            ${requests.map(r => `<tr><td>${r.id}</td><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.studentNumber)}</td><td>${escapeHtml(r.room)}</td><td>${r.status}</td><td>${r.priority || 'Medium'}</td><td>${r.date}</td>`).join('')}
         </table></body></html>`;
     const blob = new Blob([html], { type: 'application/pdf' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `all-requests-${new Date().toISOString().split('T')[0]}.pdf`;
     link.click();
-    alert('PDF exported!');
+    alert('<i class="fas fa-check"></i> PDF exported!');
 }
 
 function addExportButton() {
@@ -121,7 +121,7 @@ function addExportButton() {
     const h1 = main.querySelector('h1');
     if (!h1 || document.querySelector('.export-btn')) return;
     const btn = document.createElement('button');
-    btn.innerHTML = '📄 Export PDF';
+    btn.innerHTML = '<i class="fas fa-file-pdf"></i> Export PDF';
     btn.className = 'export-btn';
     btn.style.cssText = 'background:#4caf50; color:white; border:none; border-radius:30px; padding:10px 20px; margin-bottom:15px; cursor:pointer;';
     btn.onclick = exportToPDF;
@@ -146,7 +146,7 @@ function toggleCalendar() {
             const today = new Date();
             const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
             const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-            let calHtml = '<div id="calendarView" class="calendar-view active"><div class="calendar-header"><button onclick="toggleCalendar()">✕ Close</button></div><div class="calendar-grid">';
+            let calHtml = '<div id="calendarView" class="calendar-view active"><div class="calendar-header"><button onclick="toggleCalendar()"><i class="fas fa-times"></i> Close</button></div><div class="calendar-grid">';
             calHtml += ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => `<div style="font-weight:bold">${d}</div>`).join('');
             for (let i = 0; i < firstDay.getDay(); i++) calHtml += '<div></div>';
             for (let d = 1; d <= lastDay.getDate(); d++) {
@@ -171,7 +171,7 @@ function addCalendarButton() {
     const h1 = main.querySelector('h1');
     if (!h1 || document.querySelector('.calendar-btn')) return;
     const btn = document.createElement('button');
-    btn.innerHTML = '📅 Calendar';
+    btn.innerHTML = '<i class="fas fa-calendar-alt"></i> Calendar';
     btn.className = 'calendar-btn';
     btn.style.cssText = 'background:#2196f3; color:white; border:none; border-radius:30px; padding:10px 20px; margin-bottom:15px; margin-right:10px; cursor:pointer;';
     btn.onclick = toggleCalendar;
@@ -201,7 +201,7 @@ function renderRequests() {
     }
     if (!container) return;
     if (requests.length === 0) {
-        container.innerHTML = '<div class="no-requests">📭 No requests</div>';
+        container.innerHTML = '<div class="no-requests"><i class="fas fa-inbox"></i> No requests</div>';
         return;
     }
     container.innerHTML = '';
@@ -212,14 +212,14 @@ function renderRequests() {
         const card = document.createElement('div');
         card.className = 'request-card';
         card.innerHTML = `
-            <h3>🔧 ${escapeHtml(req.title)} <span style="background:${priorityColor}; color:white; padding:3px 12px; border-radius:20px; font-size:10px;">${req.priority || 'Medium'}</span></h3>
-            <p><strong>Room:</strong> ${escapeHtml(req.room)}</p>
-            <p><strong>Student:</strong> ${escapeHtml(req.studentNumber)}</p>
-            <p><strong>Description:</strong> ${escapeHtml(req.description)}</p>
-            <span class="status ${req.status}">${req.status.toUpperCase()}</span>
-            ${req.status === 'completed' && !rating ? `<div class="rating"><strong>Rate: </strong>${[1,2,3,4,5].map(s => `<span class="star" onclick="addRating(${req.id}, ${s})">★</span>`).join('')}</div>` : rating ? `<div class="rating">⭐ Rating: ${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</div>` : ''}
-            <div class="comments-section"><strong>💬 Comments (${comments.length})</strong>${comments.slice(-3).map(c => `<div class="comment"><strong>${c.userType === 'staff' ? 'Staff' : 'Student'}:</strong> ${escapeHtml(c.comment)}<br><small>${c.date}</small></div>`).join('')}<div class="add-comment"><input type="text" id="comment_${req.id}" placeholder="Add comment..."><button onclick="addComment(${req.id}, document.getElementById('comment_${req.id}').value, 'staff')">Post</button></div></div>
-            <div class="actions"><select onchange="updatePriority(${req.id}, this.value)"><option ${req.priority === 'Low' ? 'selected' : ''}>Low</option><option ${!req.priority || req.priority === 'Medium' ? 'selected' : ''}>Medium</option><option ${req.priority === 'High' ? 'selected' : ''}>High</option></select>${req.status !== 'inprogress' && req.status !== 'completed' ? `<button class="start" onclick="updateStatus(${req.id}, 'inprogress')">🚀 Start</button>` : ''}${req.status !== 'completed' ? `<button class="done" onclick="updateStatus(${req.id}, 'completed')">✅ Complete</button>` : ''}</div>
+            <h3><i class="fas fa-wrench"></i> ${escapeHtml(req.title)} <span style="background:${priorityColor}; color:white; padding:3px 12px; border-radius:20px; font-size:10px;"><i class="fas fa-flag"></i> ${req.priority || 'Medium'}</span></h3>
+            <p><i class="fas fa-door-open"></i> <strong>Room:</strong> ${escapeHtml(req.room)}</p>
+            <p><i class="fas fa-id-card"></i> <strong>Student:</strong> ${escapeHtml(req.studentNumber)}</p>
+            <p><i class="fas fa-align-left"></i> <strong>Description:</strong> ${escapeHtml(req.description)}</p>
+            <span class="status ${req.status}"><i class="fas ${req.status === 'pending' ? 'fa-hourglass-half' : (req.status === 'inprogress' ? 'fa-spinner fa-pulse' : 'fa-check-circle')}"></i> ${req.status.toUpperCase()}</span>
+            ${req.status === 'completed' && !rating ? `<div class="rating"><strong><i class="fas fa-star"></i> Rate: </strong>${[1,2,3,4,5].map(s => `<span class="star" onclick="addRating(${req.id}, ${s})"><i class="far fa-star"></i></span>`).join('')}</div>` : rating ? `<div class="rating"><i class="fas fa-star"></i> Rating: ${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</div>` : ''}
+            <div class="comments-section"><strong><i class="fas fa-comments"></i> Comments (${comments.length})</strong>${comments.slice(-3).map(c => `<div class="comment"><strong><i class="fas ${c.userType === 'staff' ? 'fa-user-tie' : 'fa-user-graduate'}"></i> ${c.userType === 'staff' ? 'Staff' : 'Student'}:</strong> ${escapeHtml(c.comment)}<br><small>${c.date}</small></div>`).join('')}<div class="add-comment"><input type="text" id="comment_${req.id}" placeholder="Add comment..."><button onclick="addComment(${req.id}, document.getElementById('comment_${req.id}').value, 'staff')"><i class="fas fa-paper-plane"></i> Post</button></div></div>
+            <div class="actions"><select onchange="updatePriority(${req.id}, this.value)"><option ${req.priority === 'Low' ? 'selected' : ''}><i class="fas fa-arrow-down"></i> Low</option><option ${!req.priority || req.priority === 'Medium' ? 'selected' : ''}><i class="fas fa-minus"></i> Medium</option><option ${req.priority === 'High' ? 'selected' : ''}><i class="fas fa-arrow-up"></i> High</option></select>${req.status !== 'inprogress' && req.status !== 'completed' ? `<button class="start" onclick="updateStatus(${req.id}, 'inprogress')"><i class="fas fa-play"></i> Start</button>` : ''}${req.status !== 'completed' ? `<button class="done" onclick="updateStatus(${req.id}, 'completed')"><i class="fas fa-check"></i> Complete</button>` : ''}</div>
         `;
         container.appendChild(card);
     });
@@ -244,10 +244,8 @@ document.addEventListener("DOMContentLoaded", function() {
     addCalendarButton();
     renderRequests();
     
-    // ===== ADDED: Display staff name on dashboard =====
     (function displayStaffName() {
         const userData = localStorage.getItem('user');
-        // Check if welcome div exists, if not create it
         let welcomeDiv = document.getElementById('staffWelcome');
         if (!welcomeDiv) {
             const main = document.querySelector('.main');
@@ -256,7 +254,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const div = document.createElement('div');
                 div.id = 'staffWelcome';
                 div.style.cssText = 'margin-bottom: 20px; padding: 15px 20px; background: #e3f2fd; border-radius: 15px; color: #1565c0; font-weight: 500;';
-                div.innerHTML = 'Loading...';
+                div.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Loading...';
                 h1.insertAdjacentElement('afterend', div);
                 welcomeDiv = div;
             }
@@ -266,16 +264,15 @@ document.addEventListener("DOMContentLoaded", function() {
             try {
                 const user = JSON.parse(userData);
                 if (user && user.fullname) {
-                    welcomeDiv.innerHTML = '👋 Welcome back, <strong style="color: #af954c;">' + user.fullname + '</strong>! You can manage maintenance requests here.';
+                    welcomeDiv.innerHTML = '<i class="fas fa-hand-peace"></i> Welcome back, <strong style="color: #af954c;">' + user.fullname + '</strong>! You can manage maintenance requests here.';
                 } else {
-                    welcomeDiv.innerHTML = '👋 Welcome, Staff Member!';
+                    welcomeDiv.innerHTML = '<i class="fas fa-user-tie"></i> Welcome, Staff Member!';
                 }
             } catch(e) {
-                welcomeDiv.innerHTML = '👋 Welcome, Staff Member!';
+                welcomeDiv.innerHTML = '<i class="fas fa-user-tie"></i> Welcome, Staff Member!';
             }
         } else if (welcomeDiv) {
-            welcomeDiv.innerHTML = '👋 Welcome, Staff Member!';
+            welcomeDiv.innerHTML = '<i class="fas fa-user-tie"></i> Welcome, Staff Member!';
         }
     })();
-    // ===== END OF ADDED CODE =====
 });

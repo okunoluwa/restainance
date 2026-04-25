@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard - Restainance</title>
     <link rel="stylesheet" href="student-dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
@@ -12,13 +13,13 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
-        <h2>Restainance</h2>
+        <h2><i class="fas fa-tools"></i> Restainance</h2>
 
         <ul>
-            <li class="active"><a href="student-dashboard.html">Dashboard</a></li>
-            <li><a href="report.html">Report Issue</a></li>
-            <li><a href="my-requests.html">My Requests</a></li>
-            <li><a href="login.html">Logout</a></li>
+            <li class="active"><a href="student-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="report.html"><i class="fas fa-plus-circle"></i> Report Issue</a></li>
+            <li><a href="my-requests.html"><i class="fas fa-list-ul"></i> My Requests</a></li>
+            <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </aside>
 
@@ -27,10 +28,10 @@
 
         <!-- TOP HEADER -->
         <div class="top-bar">
-            <h1>Welcome 👋 Student</h1>
+            <h1><i class="fas fa-user-graduate"></i> Welcome Student</h1>
         </div>
 
-        <!-- Add this search bar -->
+        <!-- Search bar -->
         <div style="margin: 15px 0;">
             <input type="text" id="searchInput" placeholder="🔍 Search your requests..." 
             style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px;">
@@ -39,17 +40,17 @@
         <!-- STATS -->
         <section class="stats">
             <div class="card">
-                <h3>Total Requests</h3>
+                <h3><i class="fas fa-clipboard-list"></i> Total Requests</h3>
                 <p>--</p>
             </div>
 
             <div class="card">
-                <h3>Pending</h3>
+                <h3><i class="fas fa-clock"></i> Pending</h3>
                 <p>--</p>
             </div>
 
             <div class="card">
-                <h3>Completed</h3>
+                <h3><i class="fas fa-check-circle"></i> Completed</h3>
                 <p>--</p>
             </div>
         </section>
@@ -57,18 +58,18 @@
         <!-- REQUEST SECTION -->
         <section class="requests">
 
-            <h2>Recent Requests</h2>
+            <h2><i class="fas fa-history"></i> Recent Requests</h2>
 
             <div class="request-card">
-                <h3>Broken Light</h3>
-                <p>Room: 102</p>
-                <span class="status pending">Pending</span>
+                <h3><i class="fas fa-lightbulb"></i> Broken Light</h3>
+                <p><i class="fas fa-door-open"></i> Room: 102</p>
+                <span class="status pending"><i class="fas fa-hourglass-half"></i> Pending</span>
             </div>
 
             <div class="request-card">
-                <h3>Water Leak</h3>
-                <p>Room: 204</p>
-                <span class="status completed">Completed</span>
+                <h3><i class="fas fa-tint"></i> Water Leak</h3>
+                <p><i class="fas fa-door-open"></i> Room: 204</p>
+                <span class="status completed"><i class="fas fa-check"></i> Completed</span>
             </div>
 
         </section>
@@ -79,7 +80,7 @@
 
 <!-- FOOTER -->
 <footer>
-    <p>© 2026 Restainance | Student Residence Maintenance App</p>
+    <p><i class="far fa-copyright"></i> 2026 Restainance | Student Residence Maintenance App</p>
 </footer>
 
 <script src="student-dashboard.js"></script>

@@ -5,44 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Restainance</title>
     <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
 <div class="container">
 
     <div class="form-box">
-        <h2>Welcome Back</h2>
+        <h2><i class="fas fa-sign-in-alt"></i> Welcome Back</h2>
 
         <form>
-
-            <label>Email</label>
+            <label><i class="fas fa-envelope"></i> Email</label>
             <input type="email" placeholder="Enter your email" required>
 
-            <label>Password</label>
+            <label><i class="fas fa-lock"></i> Password</label>
             <div class="password-box">
                 <input type="password" id="password" placeholder="Enter password" required>
-                <span onclick="togglePassword()">👁️</span>
+                <span onclick="togglePassword()"><i class="fas fa-eye"></i></span>
             </div>
             
-            <label>Role</label>
+            <label><i class="fas fa-users"></i> Role</label>
             <select id="role" onchange="toggleFields()">
-                <option value="student">Student</option>
-                <option value="staff">Admin</option>
-                <option value="admin">Super Admin</option>
+                <option value="student"><i class="fas fa-user-graduate"></i> Student</option>
+                <option value="staff"><i class="fas fa-user-tie"></i> Maintenance staff</option>
+                <option value="admin"><i class="fas fa-user-shield"></i>Admin/landlord</option>
             </select>
 
             <div class="options">
                 <label>
-                    <input type="checkbox"> Remember Me
+                    <input type="checkbox"> <i class="fas fa-check-square"></i> Remember Me
                 </label>
-                <a href="forgetpasword.html">Forgot Password?</a>
+                <a href="forgetpasword.html"><i class="fas fa-key"></i> Forgot Password?</a>
             </div>
 
-            <button type="submit">Login</button>
+            <button type="submit"><i class="fas fa-arrow-right"></i> Login</button>
 
         </form>
 
-        <p>Don't have an account? <a href="registration.html">Register</a></p>
+        <p>Don't have an account? <a href="registration.html"><i class="fas fa-user-plus"></i> Register</a></p>
     </div>
 
 </div>

@@ -57,18 +57,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!currentStudentNumber) {
         // Ask for student number if not already stored
-        currentStudentNumber = prompt('🔐 Please enter your student number to report an issue:');
+        currentStudentNumber = prompt('Please enter your student number to report an issue:');
         
         if (currentStudentNumber) {
             currentStudentNumber = currentStudentNumber.trim();
             if (currentStudentNumber === "") {
-                alert('❌ Student number cannot be empty. Please refresh and try again.');
+                alert('Student number cannot be empty. Please refresh and try again.');
                 return;
             }
             // Store for this session
             sessionStorage.setItem('reportStudentNumber', currentStudentNumber);
         } else {
-            alert('❌ Student number is required to report an issue.');
+            alert('Student number is required to report an issue.');
             return;
         }
     }
@@ -87,10 +87,10 @@ document.addEventListener('DOMContentLoaded', function() {
         userBanner.innerHTML = `
             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <strong>👤 Reporting as Student:</strong> ${escapeHtml(currentStudentNumber)}
+                    <i class="fas fa-user-graduate"></i> <strong>Reporting as Student:</strong> ${escapeHtml(currentStudentNumber)}
                 </div>
                 <div>
-                    <a href="my-requests.html" style="color: white; text-decoration: none; background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 5px;">← View My Requests</a>
+                    <a href="my-requests.html" style="color: white; text-decoration: none; background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 5px;"><i class="fas fa-arrow-left"></i> View My Requests</a>
                 </div>
             </div>
         `;
@@ -98,6 +98,17 @@ document.addEventListener('DOMContentLoaded', function() {
         if (formElement) {
             mainContainer.insertBefore(userBanner, formElement);
         }
+    }
+    
+    // Helper function to escape HTML
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
     }
     
     // Handle form submission
@@ -122,42 +133,42 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // VALIDATION - Check each field
         if (title === "") {
-            alert('❌ Please enter an issue title.');
+            alert('Please enter an issue title.');
             titleInput.focus();
             return;
         }
         
         if (title.length < 3) {
-            alert('❌ Issue title must be at least 3 characters long.');
+            alert('Issue title must be at least 3 characters long.');
             titleInput.focus();
             return;
         }
         
         if (category === "" || category === "-- Select Category --") {
-            alert('❌ Please select a category.');
+            alert('Please select a category.');
             categorySelect.focus();
             return;
         }
         
         if (roomNumber === "") {
-            alert('❌ Please enter your room number.');
+            alert('Please enter your room number.');
             roomNumberInput.focus();
             return;
         }
         
         if (studentNumber === "") {
-            alert('❌ Student number is missing. Please refresh the page.');
+            alert('Student number is missing. Please refresh the page.');
             return;
         }
         
         if (description === "") {
-            alert('❌ Please describe the issue.');
+            alert('Please describe the issue.');
             descriptionTextarea.focus();
             return;
         }
         
         if (description.length < 10) {
-            alert('❌ Please provide more details (at least 10 characters).');
+            alert('Please provide more details (at least 10 characters).');
             descriptionTextarea.focus();
             return;
         }
@@ -212,21 +223,21 @@ document.addEventListener('DOMContentLoaded', function() {
         if (imageFile) {
             // Check file size (max 2MB)
             if (imageFile.size > 2 * 1024 * 1024) {
-                alert('❌ Image size must be less than 2MB. Please choose a smaller image.');
+                alert('Image size must be less than 2MB. Please choose a smaller image.');
                 return;
             }
             
             // Check file type
             const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
             if (!allowedTypes.includes(imageFile.type)) {
-                alert('❌ Please upload a valid image file (JPG, PNG, GIF, or WEBP).');
+                alert('Please upload a valid image file (JPG, PNG, GIF, or WEBP).');
                 return;
             }
             
             // Disable submit button while processing
             if (submitBtn) {
                 submitBtn.disabled = true;
-                submitBtn.textContent = '⏳ Uploading image...';
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Uploading image...';
             }
             
             const reader = new FileReader();
@@ -239,27 +250,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 const saved = saveRequestToLocalStorage(newRequest);
                 
                 if (saved) {
-                    alert('✅ Request submitted successfully with image!');
+                    alert('Request submitted successfully with image!');
                     form.reset();
                     // Restore student number after reset
                     studentNumberInput.value = currentStudentNumber;
                     studentNumberInput.readOnly = true;
                 } else {
-                    alert('❌ Failed to save request. Please try again.');
+                    alert('Failed to save request. Please try again.');
                 }
                 
                 // Re-enable submit button
                 if (submitBtn) {
                     submitBtn.disabled = false;
-                    submitBtn.textContent = '✅ Submit Request';
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
                 }
             };
             
             reader.onerror = function() {
-                alert('❌ Error reading image file. Please try again.');
+                alert('<i class="fas fa-times-circle"></i> Error reading image file. Please try again.');
                 if (submitBtn) {
                     submitBtn.disabled = false;
-                    submitBtn.textContent = '✅ Submit Request';
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
                 }
             };
             
@@ -270,27 +281,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const saved = saveRequestToLocalStorage(newRequest);
             
             if (saved) {
-                alert('✅ Request submitted successfully!');
+                alert('Request submitted successfully!');
                 form.reset();
                 // Restore student number after reset
                 studentNumberInput.value = currentStudentNumber;
                 studentNumberInput.readOnly = true;
             } else {
-                alert('❌ Failed to save request. Please try again.');
+                alert(' Failed to save request. Please try again.');
             }
         }
     });
-    
-    // Helper function to escape HTML special characters
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
-    }
     
     console.log('✅ report.js loaded and ready!');
 });

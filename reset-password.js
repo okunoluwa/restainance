@@ -4,13 +4,13 @@ function initDarkMode() {
     
     const btn = document.createElement('button');
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    btn.innerHTML = isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode';
+    btn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
     btn.className = 'dark-mode-toggle';
     btn.onclick = () => {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
         localStorage.setItem('darkMode', isDark);
-        btn.innerHTML = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+        btn.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
     };
     
     if (isDarkMode) {
@@ -48,12 +48,12 @@ document.addEventListener("DOMContentLoaded", function() {
             const confirmPassword = document.getElementById("confirmPassword").value;
 
             if (newPassword !== confirmPassword) {
-                alert("Passwords do not match!");
+                alert('Passwords do not match!');
                 return;
             }
 
             if (newPassword.length < 6) {
-                alert("Password must be at least 6 characters long!");
+                alert(' Password must be at least 6 characters long!');
                 return;
             }
 
@@ -63,9 +63,9 @@ document.addEventListener("DOMContentLoaded", function() {
             if (storedUser) {
                 storedUser.password = newPassword;
                 localStorage.setItem("user", JSON.stringify(storedUser));
-                alert("Password reset successful! Please login with your new password.");
+                alert(' Password reset successful! Please login with your new password.');
             } else {
-                alert("Password reset successful! (Demo mode)");
+                alert(' Password reset successful! (Demo mode)');
             }
 
             // Redirect to login page

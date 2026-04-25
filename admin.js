@@ -3,13 +3,13 @@ function initDarkMode() {
     if (document.querySelector('.dark-mode-toggle')) return;
     const btn = document.createElement('button');
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    btn.innerHTML = isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode';
+    btn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
     btn.className = 'dark-mode-toggle';
     btn.onclick = () => {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
         localStorage.setItem('darkMode', isDark);
-        btn.innerHTML = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+        btn.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
     };
     if (isDarkMode) document.body.classList.add('dark-mode');
     document.body.appendChild(btn);
@@ -35,7 +35,7 @@ function renderRequests() {
     const requests = getRequests();
     if (!container) return;
     if (requests.length === 0) {
-        container.innerHTML = '<div class="no-requests">📭 No requests</div>';
+        container.innerHTML = '<div class="no-requests"><i class="fas fa-inbox"></i> No requests</div>';
         return;
     }
     container.innerHTML = '';
@@ -43,15 +43,15 @@ function renderRequests() {
         const card = document.createElement("div");
         card.className = "request-card";
         card.innerHTML = `
-            <h3>🔧 ${escapeHtml(req.title)}</h3>
-            <p><strong>Room:</strong> ${escapeHtml(req.room)}</p>
-            <p><strong>Student:</strong> ${escapeHtml(req.studentNumber)}</p>
-            <p><strong>Description:</strong> ${escapeHtml(req.description)}</p>
-            <span class="status ${req.status}">${req.status.toUpperCase()}</span>
+            <h3><i class="fas fa-wrench"></i> ${escapeHtml(req.title)}</h3>
+            <p><i class="fas fa-door-open"></i> <strong>Room:</strong> ${escapeHtml(req.room)}</p>
+            <p><i class="fas fa-id-card"></i> <strong>Student:</strong> ${escapeHtml(req.studentNumber)}</p>
+            <p><i class="fas fa-align-left"></i> <strong>Description:</strong> ${escapeHtml(req.description)}</p>
+            <span class="status ${req.status}"><i class="fas ${req.status === 'pending' ? 'fa-hourglass-half' : (req.status === 'inprogress' ? 'fa-spinner fa-pulse' : 'fa-check-circle')}"></i> ${req.status.toUpperCase()}</span>
             <select onchange="updateStatus(${req.id}, this.value)">
-                <option ${req.status === 'pending' ? 'selected' : ''} value="pending">Pending</option>
-                <option ${req.status === 'inprogress' ? 'selected' : ''} value="inprogress">In Progress</option>
-                <option ${req.status === 'completed' ? 'selected' : ''} value="completed">Completed</option>
+                <option ${req.status === 'pending' ? 'selected' : ''} value="pending"><i class="fas fa-hourglass-half"></i> Pending</option>
+                <option ${req.status === 'inprogress' ? 'selected' : ''} value="inprogress"><i class="fas fa-spinner"></i> In Progress</option>
+                <option ${req.status === 'completed' ? 'selected' : ''} value="completed"><i class="fas fa-check-circle"></i> Completed</option>
             </select>
         `;
         container.appendChild(card);
@@ -74,10 +74,8 @@ document.addEventListener("DOMContentLoaded", function() {
     initDarkMode();
     renderRequests();
     
-    // ===== ADDED: Display admin name on dashboard =====
     (function displayAdminName() {
         const userData = localStorage.getItem('user');
-        // Check if welcome div exists, if not create it
         let welcomeDiv = document.getElementById('adminWelcome');
         if (!welcomeDiv) {
             const main = document.querySelector('.main');
@@ -86,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const div = document.createElement('div');
                 div.id = 'adminWelcome';
                 div.style.cssText = 'margin-bottom: 20px; padding: 15px 20px; background: #e8f5e9; border-radius: 15px; color: #2e7d32; font-weight: 500;';
-                div.innerHTML = 'Loading...';
+                div.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Loading...';
                 h1.insertAdjacentElement('afterend', div);
                 welcomeDiv = div;
             }
@@ -96,16 +94,15 @@ document.addEventListener("DOMContentLoaded", function() {
             try {
                 const user = JSON.parse(userData);
                 if (user && user.fullname) {
-                    welcomeDiv.innerHTML = '👋 Welcome back, <strong style="color: #af954c;">' + user.fullname + '</strong>! You have full admin access.';
+                    welcomeDiv.innerHTML = '<i class="fas fa-hand-peace"></i> Welcome back, <strong style="color: #af954c;">' + user.fullname + '</strong>! You have full admin access.';
                 } else {
-                    welcomeDiv.innerHTML = '👋 Welcome, Admin!';
+                    welcomeDiv.innerHTML = '<i class="fas fa-user-shield"></i> Welcome, Admin!';
                 }
             } catch(e) {
-                welcomeDiv.innerHTML = '👋 Welcome, Admin!';
+                welcomeDiv.innerHTML = '<i class="fas fa-user-shield"></i> Welcome, Admin!';
             }
         } else if (welcomeDiv) {
-            welcomeDiv.innerHTML = '👋 Welcome, Admin!';
+            welcomeDiv.innerHTML = '<i class="fas fa-user-shield"></i> Welcome, Admin!';
         }
     })();
-    // ===== END OF ADDED CODE =====
 });

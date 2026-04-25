@@ -1,4 +1,4 @@
-// my-requests.js - COMPLETE WORKING VERSION WITH DEBUG LOGS
+// my-requests.js - COMPLETE WORKING VERSION WITH FONT AWESOME ICONS
 
 // ---------- Helper Functions ----------
 function getRequests() {
@@ -44,13 +44,13 @@ function initDarkMode() {
     if (document.querySelector('.dark-mode-toggle')) return;
     const btn = document.createElement('button');
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    btn.innerHTML = isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode';
+    btn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
     btn.className = 'dark-mode-toggle';
     btn.onclick = () => {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
         localStorage.setItem('darkMode', isDark);
-        btn.innerHTML = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+        btn.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
     };
     if (isDarkMode) document.body.classList.add('dark-mode');
     document.body.appendChild(btn);
@@ -99,7 +99,6 @@ function getCommentsForRequest(requestId) {
 
 // ---------- STUDENT NUMBER HANDLING (CRITICAL FIX) ----------
 function getCurrentStudentNumber() {
-    // Try to get from multiple possible keys
     let studentNum = localStorage.getItem('currentStudentNumber') ||
                      localStorage.getItem('reportStudentNumber') ||
                      localStorage.getItem('studentNumber');
@@ -110,7 +109,6 @@ function getCurrentStudentNumber() {
         studentNum = prompt('🔐 Enter your student number to view your requests:');
         if (studentNum && studentNum.trim()) {
             studentNum = studentNum.trim();
-            // Save to ALL keys for consistency across pages
             localStorage.setItem('currentStudentNumber', studentNum);
             localStorage.setItem('reportStudentNumber', studentNum);
             localStorage.setItem('studentNumber', studentNum);
@@ -146,7 +144,7 @@ function exportToPDF() {
         <p>Generated: ${new Date().toLocaleString()}</p>
         <table border="1" cellpadding="5">
             <tr><th>Title</th><th>Room</th><th>Status</th><th>Date</th></tr>
-            ${myRequests.map(r => `<tr><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.room)}</td><td>${r.status}</td><td>${r.date}</td></tr>`).join('')}
+            ${myRequests.map(r => `<tr><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.room)}</td><td>${r.status}</td><td>${r.date}</td>`).join('')}
         </table></body></html>`;
     
     const blob = new Blob([html], { type: 'application/pdf' });
@@ -170,7 +168,6 @@ function addControls() {
         return;
     }
 
-    // Search bar
     if (!document.getElementById('searchInput')) {
         const searchDiv = document.createElement('div');
         searchDiv.className = 'search-bar';
@@ -181,10 +178,9 @@ function addControls() {
         console.log('✅ Search bar added');
     }
 
-    // Export button
     if (!document.querySelector('.export-btn')) {
         const exportBtn = document.createElement('button');
-        exportBtn.innerHTML = '📄 Export PDF';
+        exportBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Export PDF';
         exportBtn.className = 'export-btn';
         exportBtn.style.cssText = 'background:#4caf50; color:white; border:none; border-radius:30px; padding:10px 18px; margin:10px 0; cursor:pointer;';
         exportBtn.onclick = exportToPDF;
@@ -219,7 +215,7 @@ function deleteRequest(id) {
     }
 }
 
-// ---------- MAIN RENDER FUNCTION ----------
+// ---------- MAIN RENDER FUNCTION (WITH FONT AWESOME ICONS) ----------
 function renderRequests() {
     const container = document.getElementById('requestsContainer');
     if (!container) {
@@ -231,58 +227,64 @@ function renderRequests() {
     console.log('👤 Current student number:', currentStudent);
     
     if (!currentStudent) {
-        container.innerHTML = '<div class="empty" style="text-align:center; padding:50px;">❌ Student number required. Please refresh and enter your number.</div>';
+        container.innerHTML = '<div class="empty" style="text-align:center; padding:50px;"><i class="fas fa-exclamation-triangle"></i> Student number required. Please refresh and enter your number.</div>';
         return;
     }
 
     const allRequests = getRequests();
     console.log('📋 All requests:', allRequests);
     
-    // Filter requests by student number
     const myRequests = allRequests.filter(req => req.studentNumber === currentStudent);
     console.log(`🎯 Found ${myRequests.length} requests for student ${currentStudent}`);
     
     if (myRequests.length === 0) {
-        container.innerHTML = '<div class="empty" style="text-align:center; padding:50px;">📭 No requests found. <a href="report.html">Report an issue</a></div>';
+        container.innerHTML = '<div class="empty" style="text-align:center; padding:50px;"><i class="fas fa-inbox"></i> No requests found. <a href="report.html"><i class="fas fa-plus-circle"></i> Report an issue</a></div>';
         return;
     }
 
     container.innerHTML = '';
-    // Show newest first
     myRequests.sort((a, b) => b.id - a.id).forEach(request => {
         const priorityColor = request.priority === 'High' ? '#dc3545' : (request.priority === 'Low' ? '#4caf50' : '#ff9800');
         const rating = getRating(request.id);
         const comments = getCommentsForRequest(request.id);
+        
+        let priorityIcon = '<i class="fas fa-minus"></i>';
+        if (request.priority === 'High') priorityIcon = '<i class="fas fa-arrow-up"></i>';
+        if (request.priority === 'Low') priorityIcon = '<i class="fas fa-arrow-down"></i>';
+        
+        let statusIcon = '<i class="fas fa-hourglass-half"></i>';
+        if (request.status === 'inprogress') statusIcon = '<i class="fas fa-spinner fa-pulse"></i>';
+        if (request.status === 'completed') statusIcon = '<i class="fas fa-check-circle"></i>';
 
         const card = document.createElement('div');
         card.className = 'request-card';
         card.innerHTML = `
-            <h3>🔧 ${escapeHtml(request.title)} 
-                <span style="background:${priorityColor}; color:white; padding:2px 10px; border-radius:20px; font-size:10px;">${request.priority || 'Medium'}</span>
+            <h3><i class="fas fa-wrench"></i> ${escapeHtml(request.title)} 
+                <span style="background:${priorityColor}; color:white; padding:2px 10px; border-radius:20px; font-size:10px;">${priorityIcon} ${request.priority || 'Medium'}</span>
             </h3>
-            <p><strong>Room:</strong> ${escapeHtml(request.room)}</p>
-            <p><strong>Category:</strong> ${escapeHtml(request.category) || 'General'}</p>
-            <p><strong>Description:</strong> ${escapeHtml(request.description)}</p>
-            <p><strong>Submitted:</strong> ${request.date}</p>
-            <span class="status ${request.status}">${request.status.toUpperCase()}</span>
+            <p><i class="fas fa-door-open"></i> <strong>Room:</strong> ${escapeHtml(request.room)}</p>
+            <p><i class="fas fa-tag"></i> <strong>Category:</strong> ${escapeHtml(request.category) || 'General'}</p>
+            <p><i class="fas fa-align-left"></i> <strong>Description:</strong> ${escapeHtml(request.description)}</p>
+            <p><i class="fas fa-calendar-alt"></i> <strong>Submitted:</strong> ${request.date}</p>
+            <span class="status ${request.status}">${statusIcon} ${request.status.toUpperCase()}</span>
             ${request.status === 'completed' && !rating ? `
-                <div class="rating"><strong>Rate: </strong>
-                    ${[1,2,3,4,5].map(s => `<span class="star" onclick="addRating(${request.id}, ${s})" style="font-size:22px; cursor:pointer;">☆</span>`).join('')}
+                <div class="rating"><strong><i class="fas fa-star"></i> Rate: </strong>
+                    ${[1,2,3,4,5].map(s => `<span class="star" onclick="addRating(${request.id}, ${s})" style="font-size:22px; cursor:pointer;"><i class="far fa-star"></i></span>`).join('')}
                 </div>
             ` : rating ? `
-                <div class="rating">⭐ Rating: ${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</div>
+                <div class="rating"><i class="fas fa-star"></i> Rating: ${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</div>
             ` : ''}
             <div class="comments-section">
-                <strong>💬 Comments (${comments.length})</strong>
-                ${comments.slice(-3).map(c => `<div class="comment"><strong>${c.userType === 'staff' ? 'Staff' : 'Student'}:</strong> ${escapeHtml(c.comment)}<br><small>${c.date}</small></div>`).join('')}
+                <strong><i class="fas fa-comments"></i> Comments (${comments.length})</strong>
+                ${comments.slice(-3).map(c => `<div class="comment"><strong><i class="fas ${c.userType === 'staff' ? 'fa-user-tie' : 'fa-user-graduate'}"></i> ${c.userType === 'staff' ? 'Staff' : 'Student'}:</strong> ${escapeHtml(c.comment)}<br><small><i class="far fa-clock"></i> ${c.date}</small></div>`).join('')}
                 <div class="add-comment" style="display:flex; gap:8px; margin-top:10px;">
                     <input type="text" id="comment_${request.id}" placeholder="Add a comment...">
-                    <button onclick="addComment(${request.id}, document.getElementById('comment_${request.id}').value, 'student')">Post</button>
+                    <button onclick="addComment(${request.id}, document.getElementById('comment_${request.id}').value, 'student')"><i class="fas fa-paper-plane"></i> Post</button>
                 </div>
             </div>
             <div class="actions" style="display:flex; gap:10px; margin-top:15px;">
-                ${request.status === 'pending' ? `<button class="edit-btn" onclick="editRequest(${request.id})" style="background:#2196f3; color:white; border:none; border-radius:25px; padding:10px; cursor:pointer;">✏️ Edit</button>` : ''}
-                <button class="delete-btn" onclick="deleteRequest(${request.id})" style="background:#dc3545; color:white; border:none; border-radius:25px; padding:10px; cursor:pointer;">🗑️ Delete</button>
+                ${request.status === 'pending' ? `<button class="edit-btn" onclick="editRequest(${request.id})" style="background:#2196f3; color:white; border:none; border-radius:25px; padding:10px; cursor:pointer;"><i class="fas fa-edit"></i> Edit</button>` : ''}
+                <button class="delete-btn" onclick="deleteRequest(${request.id})" style="background:#dc3545; color:white; border:none; border-radius:25px; padding:10px; cursor:pointer;"><i class="fas fa-trash-alt"></i> Delete</button>
             </div>
         `;
         container.appendChild(card);

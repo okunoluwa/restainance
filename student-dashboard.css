@@ -70,10 +70,10 @@ body.dark-mode .sidebar {
     font-size: 20px;
 }
 
-.sidebar li:nth-child(1) a::before { content: "🏠"; }
-.sidebar li:nth-child(2) a::before { content: "📝"; }
-.sidebar li:nth-child(3) a::before { content: "📋"; }
-.sidebar li:nth-child(4) a::before { content: "🚪"; }
+.sidebar li:nth-child(1) a::before { content: ""; }
+.sidebar li:nth-child(2) a::before { content: ""; }
+.sidebar li:nth-child(3) a::before { content: ""; }
+.sidebar li:nth-child(4) a::before { content: ""; }
 
 .sidebar .active a {
     color: #af954c;

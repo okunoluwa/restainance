@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maintenance Dashboard</title>
     <link rel="stylesheet" href="maintenance.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
@@ -12,18 +13,18 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
-        <h2>Restainance</h2>
+        <h2><i class="fas fa-tools"></i> Restainance</h2>
 
         <ul>
-            <li class="active"><a href="#">Dashboard</a></li>
-            <li><a href="login.html">Logout</a></li>
+            <li class="active"><a href="#"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </aside>
 
     <!-- MAIN -->
     <main class="main">
 
-        <h1>Maintenance Requests 🛠️</h1>
+        <h1><i class="fas fa-wrench"></i> Maintenance Requests</h1>
 
         <div id="requestsContainer"></div>
 
@@ -33,9 +34,8 @@
 
 <!-- FOOTER -->
 <footer>
-    <p>© 2026 Restainance | Student Residence Maintenance App</p>
+    <p><i class="far fa-copyright"></i> 2026 Restainance | Student Residence Maintenance App</p>
 </footer>
-
 
 <script src="maintenance.js"></script>
 </body>
