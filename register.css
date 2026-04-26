@@ -233,3 +233,27 @@ body.dark-mode .dark-mode-toggle {
         font-size: 11px;
     }
 }
+
+/* ========== ADDITIONAL RESPONSIVE FIXES ========== */
+@media (max-width: 480px) {
+    .form-box {
+        padding: 20px 15px;
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+    }
+    
+    .password-box input {
+        padding-right: 40px;
+    }
+    
+    .password-box span {
+        right: 12px;
+    }
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}

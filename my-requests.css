@@ -364,3 +364,106 @@ footer {
     }
     .dark-mode-toggle { top: 20px; right: 20px; }
 }
+
+/* ========== RESPONSIVE FIXES FOR MY-REQUESTS PAGE ========== */
+@media (max-width: 768px) {
+    .sidebar ul {
+        display: flex;
+        justify-content: space-around;
+    }
+    
+    .sidebar li {
+        flex: 1;
+        text-align: center;
+    }
+    
+    .sidebar a {
+        font-size: 10px;
+        padding: 5px 0;
+    }
+}
+
+@media (max-width: 640px) {
+    .student-info-bar {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .actions button {
+        width: 100%;
+    }
+    
+    .add-comment {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .add-comment input,
+    .add-comment button {
+        width: 100%;
+    }
+    
+    .search-bar input {
+        font-size: 16px;
+        padding: 12px 15px;
+    }
+    
+    .export-btn {
+        width: 100%;
+    }
+    
+    .request-card {
+        padding: 15px;
+    }
+    
+    .dark-mode-toggle {
+        top: 10px;
+        right: 10px;
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main {
+        padding: 15px;
+        padding-bottom: 80px;
+    }
+    
+    .main h1 {
+        font-size: 20px;
+    }
+    
+    .rating span {
+        font-size: 18px;
+    }
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* ========== FIX DARK MODE BUTTON POSITION ========== */
+.dark-mode-toggle {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    bottom: auto !important;
+    left: auto !important;
+}
+
+@media (max-width: 768px) {
+    .dark-mode-toggle {
+        top: 10px !important;
+        right: 10px !important;
+        padding: 6px 12px !important;
+        font-size: 11px !important;
+    }
+}

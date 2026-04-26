@@ -38,6 +38,21 @@ body.dark-mode .navbar {
     color: #af954c;
 }
 
+/* HAMBURGER MENU ICON - hidden on desktop */
+.hamburger {
+    display: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #af954c;
+    background: none;
+    border: none;
+    padding: 5px 10px;
+}
+
+body.dark-mode .hamburger {
+    color: #af954c;
+}
+
 .nav-links {
     list-style: none;
     display: flex;
@@ -234,7 +249,8 @@ body.dark-mode .dark-mode-toggle {
     transform: scale(1.02);
 }
 
-@media (min-width: 768px) {
+/* Desktop styles */
+@media (min-width: 769px) {
     .hero h1 { font-size: 3rem; }
     .hero p { font-size: 1.2rem; }
     .feature-container {
@@ -247,7 +263,176 @@ body.dark-mode .dark-mode-toggle {
     .dark-mode-toggle { top: 20px; right: 20px; bottom: auto; }
 }
 
+/* Mobile styles with hamburger menu */
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+        z-index: 101;
+    }
+    
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        border-radius: 0 0 20px 20px;
+        z-index: 99;
+    }
+    
+    body.dark-mode .nav-links {
+        background: #1e1e2e;
+    }
+    
+    .nav-links.active {
+        display: flex;
+    }
+    
+    .nav-links li {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .nav-links a {
+        display: block;
+        padding: 12px;
+        font-size: 1rem;
+    }
+    
+    .btn {
+        display: inline-block;
+        width: auto;
+    }
+    
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+    
+    .hero p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Very small phones */
 @media (max-width: 480px) {
-    .navbar { flex-direction: column; gap: 10px; }
-    .hero h1 { font-size: 1.6rem; }
+    .navbar {
+        padding: 12px 15px;
+    }
+    
+    .logo {
+        font-size: 1.2rem;
+    }
+    
+    .hamburger {
+        font-size: 1.5rem;
+    }
+    
+    .nav-links {
+        top: 55px;
+    }
+    
+    .hero h1 {
+        font-size: 1.4rem;
+    }
+    
+    .hero p {
+        font-size: 0.85rem;
+    }
+    
+    .cta {
+        padding: 10px 25px;
+        font-size: 0.9rem;
+    }
+    
+    .features h2 {
+        font-size: 1.3rem;
+    }
+    
+    .feature h3 {
+        font-size: 1rem;
+    }
+    
+    .feature p {
+        font-size: 0.8rem;
+    }
+    
+    .cta-section h2 {
+        font-size: 1.1rem;
+    }
+    
+    .dark-mode-toggle {
+        bottom: 15px;
+        right: 15px;
+        padding: 8px 14px;
+        font-size: 11px;
+    }
+}
+
+/* Prevent horizontal scroll */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Additional styles for dark mode menu item - Add to bottom of style.css */
+.dark-mode-menu-item a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    margin-top: 5px;
+    padding-top: 12px;
+}
+
+body.dark-mode .dark-mode-menu-item a {
+    border-top-color: rgba(255,255,255,0.1);
+}
+
+/* Floating dark mode button */
+.floating-dark-mode-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #af954c;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 200;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+}
+
+body.dark-mode .floating-dark-mode-btn {
+    background: #0f3460;
+}
+
+.floating-dark-mode-btn:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+/* Hide floating button on mobile, show in menu */
+@media (max-width: 768px) {
+    .floating-dark-mode-btn {
+        display: none;
+    }
+    .dark-mode-menu-item {
+        display: block !important;
+    }
+}
+
+/* Show dark mode menu item only on mobile, hide on desktop */
+@media (min-width: 769px) {
+    .dark-mode-menu-item {
+        display: none;
+    }
 }

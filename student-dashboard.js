@@ -1,6 +1,27 @@
 let currentStudentNumber = null;
 let currentStudentName = null;
 
+// ========== DARK MODE FUNCTION (SIDEBAR BUTTON) ==========
+function initDarkMode() {
+    const darkModeBtn = document.getElementById('darkModeSidebarBtn');
+    if (!darkModeBtn) return;
+    
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        darkModeBtn.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+    }
+    
+    darkModeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+        darkModeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
+    });
+}
+
 function getRequests() {
     return JSON.parse(localStorage.getItem("requests")) || [];
 }
@@ -15,29 +36,6 @@ function escapeHtml(str) {
     });
 }
 
-// Dark mode
-function initDarkMode() {
-    if (document.querySelector('.dark-mode-toggle')) return;
-    
-    const btn = document.createElement('button');
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    btn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
-    btn.className = 'dark-mode-toggle';
-    btn.onclick = () => {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        localStorage.setItem('darkMode', isDark);
-        btn.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
-    };
-    
-    if (isDarkMode) {
-        document.body.classList.add('dark-mode');
-    }
-    
-    document.body.appendChild(btn);
-}
-
-// Get current logged in user info
 function getCurrentUser() {
     const userData = localStorage.getItem('user');
     if (userData) {
@@ -51,9 +49,7 @@ function getCurrentUser() {
     return null;
 }
 
-// Get student number and name
 function getCurrentStudent() {
-    // First try to get from user object
     const user = getCurrentUser();
     
     if (user && user.role === 'student') {
@@ -63,13 +59,11 @@ function getCurrentStudent() {
         if (user.fullname) {
             currentStudentName = user.fullname;
         }
-        // Store for quick access
         localStorage.setItem('studentNumber', currentStudentNumber);
         localStorage.setItem('studentName', currentStudentName);
         return currentStudentNumber;
     }
     
-    // Fallback to localStorage
     let studentNumber = localStorage.getItem('studentNumber');
     if (!studentNumber) {
         studentNumber = prompt('Enter your student number:');
@@ -79,7 +73,6 @@ function getCurrentStudent() {
         }
     }
     
-    // Try to get name from stored user
     const storedName = localStorage.getItem('studentName');
     if (storedName) {
         currentStudentName = storedName;
@@ -93,7 +86,6 @@ function getCurrentStudent() {
     return studentNumber;
 }
 
-// Search
 function filterRequests() {
     const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
     const cards = document.querySelectorAll('.request-card');
@@ -117,7 +109,6 @@ function addSearchBar() {
     if (searchInput) searchInput.addEventListener('keyup', filterRequests);
 }
 
-// Export PDF
 function exportToPDF() {
     const requests = getRequests();
     const myRequests = requests.filter(req => req.studentNumber === currentStudentNumber);
@@ -129,7 +120,7 @@ function exportToPDF() {
         <p>Generated: ${new Date().toLocaleString()}</p>
         <table border="1" cellpadding="5">
             <tr><th>Title</th><th>Room</th><th>Status</th><th>Date</th></tr>
-            ${myRequests.map(r => `<tr><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.room)}</td><td>${r.status}</td><td>${r.date}</td>`).join('')}
+            ${myRequests.map(r => `<tr><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.room)}</td><td>${r.status}</td><td>${r.date}</td></tr>`).join('')}
         </table></body></html>`;
     
     const blob = new Blob([html], { type: 'application/pdf' });
@@ -140,20 +131,28 @@ function exportToPDF() {
     alert('PDF exported!');
 }
 
-function addExportButton() {
-    const topBar = document.querySelector('.top-bar');
-    if (!topBar || document.querySelector('.export-btn')) return;
+function addExportButtonAtBottom() {
+    const requestsSection = document.querySelector('.requests');
+    if (!requestsSection) return;
     
-    const btn = document.createElement('button');
-    btn.innerHTML = '<i class="fas fa-file-pdf"></i> Export PDF';
-    btn.className = 'export-btn';
-    btn.style.cssText = 'background:#4caf50; color:white; border:none; border-radius:30px; padding:10px 18px; margin-left:10px; cursor:pointer;';
-    btn.onclick = exportToPDF;
-    const reportBtn = topBar.querySelector('button:first-of-type');
-    if (reportBtn) reportBtn.insertAdjacentElement('afterend', btn);
+    const existingBtn = document.querySelector('.export-btn-bottom');
+    if (existingBtn) existingBtn.remove();
+    
+    // Check if there are requests before adding button
+    const requests = getRequests();
+    const myRequests = requests.filter(req => req.studentNumber === currentStudentNumber);
+    
+    if (myRequests.length === 0) return;
+    
+    const exportBtn = document.createElement('button');
+    exportBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Export PDF';
+    exportBtn.className = 'export-btn-bottom';
+    exportBtn.style.cssText = 'background:#4caf50; color:white; border:none; border-radius:30px; padding:12px 20px; margin-top:20px; width:100%; cursor:pointer; font-weight:600;';
+    exportBtn.onclick = exportToPDF;
+    
+    requestsSection.appendChild(exportBtn);
 }
 
-// Stats
 function updateStats(requests) {
     const myRequests = requests.filter(req => req.studentNumber === currentStudentNumber);
     const totalEl = document.querySelector('.card:first-child p');
@@ -164,7 +163,6 @@ function updateStats(requests) {
     if (completedEl) completedEl.innerHTML = myRequests.filter(r => r.status === 'completed').length;
 }
 
-// Load requests
 function loadRecentRequests() {
     const requests = getRequests();
     const myRequests = requests.filter(req => req.studentNumber === currentStudentNumber);
@@ -173,13 +171,15 @@ function loadRecentRequests() {
     const requestsSection = document.querySelector('.requests');
     if (!requestsSection) return;
     
-    // Remove old cards but keep the h2
-    const oldCards = requestsSection.querySelectorAll('.request-card');
+    const oldCards = requestsSection.querySelectorAll('.request-card:not(.no-requests-card)');
     oldCards.forEach(card => card.remove());
+    
+    const oldExportBtn = document.querySelector('.export-btn-bottom');
+    if (oldExportBtn) oldExportBtn.remove();
     
     if (recentRequests.length === 0) {
         const emptyDiv = document.createElement('div');
-        emptyDiv.className = 'request-card';
+        emptyDiv.className = 'request-card no-requests-card';
         emptyDiv.style.textAlign = 'center';
         emptyDiv.innerHTML = '<i class="fas fa-inbox"></i> No requests yet. <a href="report.html">Report an issue</a>';
         requestsSection.appendChild(emptyDiv);
@@ -199,6 +199,8 @@ function loadRecentRequests() {
             requestsSection.appendChild(card);
         });
     }
+    
+    addExportButtonAtBottom();
     updateStats(requests);
 }
 
@@ -206,14 +208,11 @@ function goToReport() {
     window.location.href = 'report.html';
 }
 
-// Make function global
 window.goToReport = goToReport;
 
-// Initialize
 document.addEventListener('DOMContentLoaded', function() {
     initDarkMode();
     
-    // Get user info first
     const user = getCurrentUser();
     
     currentStudentNumber = getCurrentStudent();
@@ -228,14 +227,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const welcomeHeader = document.querySelector('.top-bar h1');
     if (welcomeHeader) {
-        // Display full name if available, otherwise student number
         const displayName = currentStudentName || (user && user.fullname) || currentStudentNumber;
         welcomeHeader.innerHTML = `<i class="fas fa-user-graduate"></i> Welcome ${escapeHtml(displayName)}`;
     }
     
     addSearchBar();
-    addExportButton();
     loadRecentRequests();
-    // Auto-refresh every 10 seconds
     setInterval(loadRecentRequests, 10000);
 });

@@ -1,18 +1,22 @@
-// Dark mode
+// ========== DARK MODE FUNCTION (SIDEBAR BUTTON) ==========
 function initDarkMode() {
-    if (document.querySelector('.dark-mode-toggle')) return;
-    const btn = document.createElement('button');
+    const darkModeBtn = document.getElementById('darkModeSidebarBtn');
+    if (!darkModeBtn) return;
+    
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    btn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
-    btn.className = 'dark-mode-toggle';
-    btn.onclick = () => {
+    
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        darkModeBtn.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+    }
+    
+    darkModeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
         localStorage.setItem('darkMode', isDark);
-        btn.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
-    };
-    if (isDarkMode) document.body.classList.add('dark-mode');
-    document.body.appendChild(btn);
+        darkModeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
+    });
 }
 
 function getRequests() {
@@ -52,6 +56,54 @@ function updateStatus(id, newStatus) {
     requests = requests.map(req => req.id === id ? { ...req, status: newStatus } : req);
     saveRequests(requests);
     renderRequests();
+}
+
+function exportToPDF() {
+    const requests = getRequests();
+    
+    let html = `<html><head><title>All Requests</title></head><body>
+        <h1>All Maintenance Requests</h1>
+        <p>Generated: ${new Date().toLocaleString()}</p>
+        <table border="1" cellpadding="5">
+            <tr><th>ID</th><th>Title</th><th>Student Number</th><th>Room</th><th>Status</th><th>Assigned To</th><th>Date</th></tr>
+            ${requests.map(r => `<tr><td style="border:1px solid #ddd; padding:8px">${r.id}</td><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.title)}</td><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.studentNumber)}</td><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.room)}</td><td style="border:1px solid #ddd; padding:8px">${r.status}</td><td style="border:1px solid #ddd; padding:8px">${r.assignedTo || 'Unassigned'}</td><td style="border:1px solid #ddd; padding:8px">${r.date}</td>`).join('')}
+        </table></body></html>`;
+    const blob = new Blob([html], { type: 'application/pdf' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `all-requests-${new Date().toISOString().split('T')[0]}.pdf`;
+    link.click();
+    alert('PDF exported!');
+}
+
+function addExportButtonAtBottom() {
+    const container = document.getElementById('requestsContainer');
+    if (!container) return;
+    
+    const existingBtn = document.querySelector('.export-btn-bottom');
+    if (existingBtn) existingBtn.remove();
+    
+    // Check if there are requests before adding button
+    const requests = getRequests();
+    if (requests.length === 0) return;
+    
+    const exportBtn = document.createElement('button');
+    exportBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Export PDF';
+    exportBtn.className = 'export-btn-bottom';
+    exportBtn.style.cssText = 'background:#4caf50; color:white; border:none; border-radius:30px; padding:12px 20px; margin-top:20px; width:100%; cursor:pointer; font-weight:600;';
+    exportBtn.onclick = exportToPDF;
+    
+    container.appendChild(exportBtn);
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
 }
 
 function renderRequests() {
@@ -105,16 +157,9 @@ function renderRequests() {
         `;
         container.appendChild(card);
     });
-}
-
-function escapeHtml(str) {
-    if (!str) return '';
-    return String(str).replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-    });
+    
+    // Add export button at the bottom (only if requests exist)
+    addExportButtonAtBottom();
 }
 
 window.updateAssignment = updateAssignment;
@@ -144,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function() {
             try {
                 const user = JSON.parse(userData);
                 if (user && user.fullname) {
-                    welcomeDiv.innerHTML = '<i class="fas fa-hand-peace"></i> Welcome back, <strong style="color: #af954c;">' + user.fullname + '</strong>! You can assign tasks to maintenance staff.';
+                    welcomeDiv.innerHTML = '<i class="fas fa-hand-peace"></i> Welcome back, <strong style="color: #af954c;">' + escapeHtml(user.fullname) + '</strong>! You can assign tasks to maintenance staff.';
                 } else {
                     welcomeDiv.innerHTML = '<i class="fas fa-user-shield"></i> Welcome, Admin!';
                 }

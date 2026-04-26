@@ -1,8 +1,32 @@
 // report.js
 // Complete working version for student maintenance report submission
 
+// ========== DARK MODE FUNCTION (SIDEBAR BUTTON) ==========
+function initDarkMode() {
+    const darkModeBtn = document.getElementById('darkModeSidebarBtn');
+    if (!darkModeBtn) return;
+    
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        darkModeBtn.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+    }
+    
+    darkModeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+        darkModeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
+    });
+}
+
 // Wait for the page to fully load
 document.addEventListener('DOMContentLoaded', function() {
+    
+    // Initialize dark mode
+    initDarkMode();
     
     // Get all form elements by their IDs
     const form = document.getElementById('reportForm');

@@ -69,8 +69,9 @@ body.dark-mode .sidebar {
     font-size: 20px;
 }
 
-.sidebar li:first-child a::before { content: ""; }
-.sidebar li:last-child a::before { content: ""; }
+.sidebar li:nth-child(1) a::before { content: ""; }
+.sidebar li:nth-child(2) a::before { content: ""; }
+.sidebar li:nth-child(3) a::before { content: ""; }
 
 .sidebar .active a {
     color: #b59458;
@@ -405,28 +406,6 @@ body.dark-mode .calendar-day.has-request {
     background: #c4a85c;
 }
 
-/* DARK MODE TOGGLE */
-.dark-mode-toggle {
-    position: fixed;
-    top: 12px;
-    right: 12px;
-    background: white;
-    color: #333;
-    border: none;
-    border-radius: 30px;
-    padding: 8px 16px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    z-index: 200;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-body.dark-mode .dark-mode-toggle {
-    background: #1e1e2e;
-    color: #eee;
-}
-
 /* FOOTER */
 footer {
     display: none;
@@ -471,5 +450,96 @@ footer {
         background: #1e1e2e;
         color: #666;
     }
-    .dark-mode-toggle { top: 20px; right: 20px; }
+}
+
+/* ========== RESPONSIVE FIXES FOR MAINTENANCE PAGE ========== */
+@media (max-width: 768px) {
+    .toolbar {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .toolbar button {
+        width: 100%;
+    }
+    
+    .sidebar ul {
+        display: flex;
+        justify-content: space-around;
+    }
+    
+    .sidebar li {
+        flex: 1;
+        text-align: center;
+    }
+    
+    .sidebar a {
+        font-size: 10px;
+        padding: 5px 0;
+    }
+}
+
+@media (max-width: 640px) {
+    .actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .actions select,
+    .actions button {
+        width: 100%;
+    }
+    
+    .add-comment {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .add-comment input,
+    .add-comment button {
+        width: 100%;
+    }
+    
+    .calendar-grid {
+        gap: 4px;
+    }
+    
+    .calendar-day {
+        padding: 8px 2px;
+        font-size: 11px;
+    }
+    
+    .calendar-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .calendar-header button {
+        width: 100%;
+    }
+    
+    .search-bar input {
+        font-size: 16px;
+        padding: 12px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main h1 {
+        font-size: 20px;
+    }
+    
+    .star {
+        font-size: 18px;
+    }
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* ========== REMOVE FLOATING DARK MODE BUTTON ========== */
+.dark-mode-toggle {
+    display: none !important;
 }

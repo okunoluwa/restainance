@@ -1,5 +1,25 @@
 // maintenance.js - Staff Dashboard
-// For managing maintenance requests assigned to them
+
+// ========== DARK MODE FUNCTION (SIDEBAR BUTTON) ==========
+function initDarkMode() {
+    const darkModeBtn = document.getElementById('darkModeSidebarBtn');
+    if (!darkModeBtn) return;
+    
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        darkModeBtn.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+    }
+    
+    darkModeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+        darkModeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
+    });
+}
 
 const container = document.getElementById("requestsContainer");
 let currentStaffName = null;
@@ -12,24 +32,6 @@ function saveRequests(requests) {
     localStorage.setItem("requests", JSON.stringify(requests));
 }
 
-// Dark mode
-function initDarkMode() {
-    if (document.querySelector('.dark-mode-toggle')) return;
-    const btn = document.createElement('button');
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    btn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
-    btn.className = 'dark-mode-toggle';
-    btn.onclick = () => {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        localStorage.setItem('darkMode', isDark);
-        btn.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
-    };
-    if (isDarkMode) document.body.classList.add('dark-mode');
-    document.body.appendChild(btn);
-}
-
-// Get current logged in staff name
 function getCurrentStaffName() {
     if (currentStaffName) return currentStaffName;
     
@@ -59,7 +61,6 @@ function getCurrentStaffName() {
     return currentStaffName;
 }
 
-// Rating
 function addRating(requestId, rating) {
     let ratings = JSON.parse(localStorage.getItem('ratings')) || [];
     ratings = ratings.filter(r => r.requestId !== requestId);
@@ -74,7 +75,6 @@ function getRating(requestId) {
     return rating ? rating.rating : null;
 }
 
-// Comments
 function addComment(requestId, comment, userType) {
     if (!comment || !comment.trim()) return;
     let comments = JSON.parse(localStorage.getItem('comments')) || [];
@@ -88,7 +88,6 @@ function getComments(requestId) {
     return comments.filter(c => c.requestId === requestId);
 }
 
-// Update status
 function updateStatus(id, newStatus) {
     let requests = getRequests();
     const request = requests.find(r => r.id === id);
@@ -108,7 +107,6 @@ function updatePriority(id, priority) {
     renderRequests();
 }
 
-// Search
 function filterRequests() {
     const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
     const cards = document.querySelectorAll('.request-card');
@@ -131,7 +129,6 @@ function addSearchBar() {
     if (searchInput) searchInput.addEventListener('keyup', filterRequests);
 }
 
-// Export
 function exportToPDF() {
     const requests = getRequests();
     const staffName = getCurrentStaffName();
@@ -141,9 +138,9 @@ function exportToPDF() {
         <h1>My Assigned Maintenance Requests</h1>
         <p>Staff: ${escapeHtml(staffName)}</p>
         <p>Generated: ${new Date().toLocaleString()}</p>
-        <table border="1" cellpadding="5" cellspacing="0">
-            <tr><th>ID</th><th>Title</th><th>Student Name</th><th>Student Number</th><th>Room</th><th>Status</th><th>Priority</th><th>Date</th></tr>
-            ${myRequests.map(r => `<tr><td>${r.id}</td><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.studentName || r.studentNumber)}</td><td>${escapeHtml(r.studentNumber)}</td><td>${escapeHtml(r.room)}</td><td>${r.status}</td><td>${r.priority || 'Medium'}</td><td>${r.date}</td>`).join('')}
+        <table border="1" cellpadding="5">
+            <tr><th>Title</th><th>Student Name</th><th>Student Number</th><th>Room</th><th>Status</th><th>Priority</th><th>Date</th></tr>
+            ${myRequests.map(r => `<tr><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.title)}</td><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.studentName || r.studentNumber)}</td><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.studentNumber)}</td><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.room)}</td><td style="border:1px solid #ddd; padding:8px">${r.status}</td><td style="border:1px solid #ddd; padding:8px">${r.priority || 'Medium'}</td><td style="border:1px solid #ddd; padding:8px">${r.date}</td></tr>`).join('')}
         </table></body></html>`;
     const blob = new Blob([html], { type: 'application/pdf' });
     const link = document.createElement('a');
@@ -153,20 +150,31 @@ function exportToPDF() {
     alert('PDF exported!');
 }
 
-function addExportButton() {
-    const main = document.querySelector('.main');
-    if (!main) return;
-    const h1 = main.querySelector('h1');
-    if (!h1 || document.querySelector('.export-btn')) return;
-    const btn = document.createElement('button');
-    btn.innerHTML = '<i class="fas fa-file-pdf"></i> Export PDF';
-    btn.className = 'export-btn';
-    btn.style.cssText = 'background:#4caf50; color:white; border:none; border-radius:30px; padding:10px 20px; margin-bottom:15px; cursor:pointer;';
-    btn.onclick = exportToPDF;
-    h1.insertAdjacentElement('afterend', btn);
+function addExportButtonAtBottom() {
+    const container = document.getElementById('requestsContainer');
+    if (!container) return;
+    
+    const existingBtn = document.querySelector('.export-btn-bottom');
+    if (existingBtn) existingBtn.remove();
+    
+    // Check if there are assigned requests before adding button
+    const staffName = getCurrentStaffName();
+    if (!staffName) return;
+    
+    const requests = getRequests();
+    const myRequests = requests.filter(req => req.assignedTo === staffName);
+    
+    if (myRequests.length === 0) return;
+    
+    const exportBtn = document.createElement('button');
+    exportBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Export PDF';
+    exportBtn.className = 'export-btn-bottom';
+    exportBtn.style.cssText = 'background:#4caf50; color:white; border:none; border-radius:30px; padding:12px 20px; margin-top:20px; width:100%; cursor:pointer; font-weight:600;';
+    exportBtn.onclick = exportToPDF;
+    
+    container.appendChild(exportBtn);
 }
 
-// Calendar
 let calendarActive = false;
 function toggleCalendar() {
     calendarActive = !calendarActive;
@@ -241,7 +249,6 @@ function renderRequests() {
     }
     
     let requests = getRequests();
-    // Filter only requests assigned to this staff member
     let myRequests = requests.filter(req => req.assignedTo === staffName);
     
     const searchTerm = document.getElementById('searchInput')?.value;
@@ -286,32 +293,30 @@ function renderRequests() {
             <span class="status ${req.status}">${statusIcon} ${req.status.toUpperCase()}</span>
             ${req.status === 'completed' && !rating ? `<div class="rating"><strong><i class="fas fa-star"></i> Rate: </strong>${[1,2,3,4,5].map(s => `<span class="star" onclick="addRating(${req.id}, ${s})"><i class="far fa-star"></i></span>`).join('')}</div>` : rating ? `<div class="rating"><i class="fas fa-star"></i> Rating: ${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</div>` : ''}
             <div class="comments-section"><strong><i class="fas fa-comments"></i> Comments (${comments.length})</strong>${comments.slice(-3).map(c => `<div class="comment"><strong><i class="fas ${c.userType === 'staff' ? 'fa-user-tie' : 'fa-user-graduate'}"></i> ${c.userType === 'staff' ? 'Staff' : 'Student'}:</strong> ${escapeHtml(c.comment)}<br><small><i class="far fa-clock"></i> ${c.date}</small></div>`).join('')}<div class="add-comment"><input type="text" id="comment_${req.id}" placeholder="Add comment..."><button onclick="addComment(${req.id}, document.getElementById('comment_${req.id}').value, 'staff')"><i class="fas fa-paper-plane"></i> Post</button></div></div>
-            <div class="actions"><select onchange="updatePriority(${req.id}, this.value)"><option ${req.priority === 'Low' ? 'selected' : ''}><i class="fas fa-arrow-down"></i> Low</option><option ${!req.priority || req.priority === 'Medium' ? 'selected' : ''}><i class="fas fa-minus"></i> Medium</option><option ${req.priority === 'High' ? 'selected' : ''}><i class="fas fa-arrow-up"></i> High</option></select>${req.status !== 'inprogress' && req.status !== 'completed' ? `<button class="start" onclick="updateStatus(${req.id}, 'inprogress')"><i class="fas fa-play"></i> Start</button>` : ''}${req.status !== 'completed' ? `<button class="done" onclick="updateStatus(${req.id}, 'completed')"><i class="fas fa-check"></i> Complete</button>` : ''}</div>
+            <div class="actions"><select onchange="updatePriority(${req.id}, this.value)"><option ${req.priority === 'Low' ? 'selected' : ''} value="Low"><i class="fas fa-arrow-down"></i> Low</option><option ${(!req.priority || req.priority === 'Medium') ? 'selected' : ''} value="Medium"><i class="fas fa-minus"></i> Medium</option><option ${req.priority === 'High' ? 'selected' : ''} value="High"><i class="fas fa-arrow-up"></i> High</option></select>${req.status !== 'inprogress' && req.status !== 'completed' ? `<button class="start" onclick="updateStatus(${req.id}, 'inprogress')"><i class="fas fa-play"></i> Start</button>` : ''}${req.status !== 'completed' ? `<button class="done" onclick="updateStatus(${req.id}, 'completed')"><i class="fas fa-check"></i> Complete</button>` : ''}</div>
         `;
         container.appendChild(card);
     });
+    
+    // Add export button at the bottom (only if assigned requests exist)
+    addExportButtonAtBottom();
 }
 
-// Make functions global
 window.addRating = addRating;
 window.addComment = addComment;
 window.updateStatus = updateStatus;
 window.updatePriority = updatePriority;
 
-// Request notification permission
 if ("Notification" in window && Notification.permission === "default") {
     Notification.requestPermission();
 }
 
-// Initialize
 document.addEventListener("DOMContentLoaded", function() {
     initDarkMode();
     addSearchBar();
-    addExportButton();
     addCalendarButton();
     renderRequests();
     
-    // Display staff name on dashboard
     (function displayStaffName() {
         const userData = localStorage.getItem('user');
         let welcomeDiv = document.getElementById('staffWelcome');

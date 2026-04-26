@@ -1,4 +1,25 @@
-// my-requests.js - COMPLETE WORKING VERSION WITH FONT AWESOME ICONS
+// my-requests.js - COMPLETE WORKING VERSION
+
+// ========== DARK MODE FUNCTION (SIDEBAR BUTTON) ==========
+function initDarkMode() {
+    const darkModeBtn = document.getElementById('darkModeSidebarBtn');
+    if (!darkModeBtn) return;
+    
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        darkModeBtn.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+    }
+    
+    darkModeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+        darkModeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
+    });
+}
 
 // ---------- Helper Functions ----------
 function getRequests() {
@@ -37,23 +58,6 @@ function escapeHtml(str) {
         if (m === '>') return '&gt;';
         return m;
     });
-}
-
-// ---------- Dark Mode ----------
-function initDarkMode() {
-    if (document.querySelector('.dark-mode-toggle')) return;
-    const btn = document.createElement('button');
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    btn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
-    btn.className = 'dark-mode-toggle';
-    btn.onclick = () => {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        localStorage.setItem('darkMode', isDark);
-        btn.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
-    };
-    if (isDarkMode) document.body.classList.add('dark-mode');
-    document.body.appendChild(btn);
 }
 
 // ---------- Rating Functions ----------
@@ -97,7 +101,7 @@ function getCommentsForRequest(requestId) {
     return comments.filter(c => c.requestId === requestId);
 }
 
-// ---------- STUDENT NUMBER HANDLING (CRITICAL FIX) ----------
+// ---------- STUDENT NUMBER HANDLING ----------
 function getCurrentStudentNumber() {
     let studentNum = localStorage.getItem('currentStudentNumber') ||
                      localStorage.getItem('reportStudentNumber') ||
@@ -144,7 +148,7 @@ function exportToPDF() {
         <p>Generated: ${new Date().toLocaleString()}</p>
         <table border="1" cellpadding="5">
             <tr><th>Title</th><th>Room</th><th>Status</th><th>Date</th></tr>
-            ${myRequests.map(r => `<tr><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.room)}</td><td>${r.status}</td><td>${r.date}</td>`).join('')}
+            ${myRequests.map(r => `<tr><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.title)}</td><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.room)}</td><td style="border:1px solid #ddd; padding:8px">${r.status}</td><td style="border:1px solid #ddd; padding:8px">${r.date}</td></tr>`).join('')}
         </table></body></html>`;
     
     const blob = new Blob([html], { type: 'application/pdf' });
@@ -155,7 +159,33 @@ function exportToPDF() {
     alert('✅ PDF exported!');
 }
 
-// ---------- Add UI Controls ----------
+// ---------- Add Export Button at Bottom (only if requests exist) ----------
+function addExportButtonAtBottom() {
+    const container = document.getElementById('requestsContainer');
+    if (!container) return;
+    
+    const existingBtn = document.querySelector('.export-btn-bottom');
+    if (existingBtn) existingBtn.remove();
+    
+    // Check if there are requests before adding button
+    const currentStudent = getCurrentStudentNumber();
+    if (!currentStudent) return;
+    
+    const allRequests = getRequests();
+    const myRequests = allRequests.filter(req => req.studentNumber === currentStudent);
+    
+    if (myRequests.length === 0) return;
+    
+    const exportBtn = document.createElement('button');
+    exportBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Export PDF';
+    exportBtn.className = 'export-btn-bottom';
+    exportBtn.style.cssText = 'background:#4caf50; color:white; border:none; border-radius:30px; padding:12px 20px; margin-top:20px; width:100%; cursor:pointer; font-weight:600;';
+    exportBtn.onclick = exportToPDF;
+    
+    container.appendChild(exportBtn);
+}
+
+// ---------- Add UI Controls (Search Bar Only) ----------
 function addControls() {
     const main = document.querySelector('.main');
     if (!main) {
@@ -176,18 +206,6 @@ function addControls() {
         h1.insertAdjacentElement('afterend', searchDiv);
         document.getElementById('searchInput').addEventListener('keyup', filterRequests);
         console.log('✅ Search bar added');
-    }
-
-    if (!document.querySelector('.export-btn')) {
-        const exportBtn = document.createElement('button');
-        exportBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Export PDF';
-        exportBtn.className = 'export-btn';
-        exportBtn.style.cssText = 'background:#4caf50; color:white; border:none; border-radius:30px; padding:10px 18px; margin:10px 0; cursor:pointer;';
-        exportBtn.onclick = exportToPDF;
-        const searchDiv = document.querySelector('.search-bar');
-        if (searchDiv) searchDiv.insertAdjacentElement('afterend', exportBtn);
-        else h1.insertAdjacentElement('afterend', exportBtn);
-        console.log('✅ Export button added');
     }
 }
 
@@ -215,7 +233,7 @@ function deleteRequest(id) {
     }
 }
 
-// ---------- MAIN RENDER FUNCTION (WITH FONT AWESOME ICONS) ----------
+// ---------- MAIN RENDER FUNCTION ----------
 function renderRequests() {
     const container = document.getElementById('requestsContainer');
     if (!container) {
@@ -289,6 +307,9 @@ function renderRequests() {
         `;
         container.appendChild(card);
     });
+    
+    // Add export button at the bottom (only if requests exist)
+    addExportButtonAtBottom();
 }
 
 // ---------- Expose global functions ----------
