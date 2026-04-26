@@ -27,9 +27,9 @@ body.dark-mode {
 
 .form-box {
     background: white;
-    padding: 35px 25px;
+    padding: 40px 35px;
     width: 100%;
-    max-width: 400px;
+    max-width: 900px;
     border-radius: 30px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     transition: background 0.3s;
@@ -41,7 +41,7 @@ body.dark-mode .form-box {
 
 h2 {
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     font-size: 1.8rem;
     color: #333;
 }
@@ -55,8 +55,22 @@ form {
     flex-direction: column;
 }
 
+/* 2-COLUMN LAYOUT - wider with better spacing */
+.two-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px 30px;
+    margin-bottom: 10px;
+}
+
+.two-columns .field-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
 label {
-    margin-top: 15px;
+    margin-top: 0;
+    margin-bottom: 5px;
     font-weight: 600;
     font-size: 0.85rem;
     color: #555;
@@ -68,12 +82,12 @@ body.dark-mode label {
 
 input, select {
     padding: 14px 16px;
-    margin-top: 6px;
     border-radius: 30px;
     border: 1px solid #e0e0e0;
     font-size: 1rem;
     transition: all 0.3s;
     background: #f8f9fa;
+    width: 100%;
 }
 
 body.dark-mode input, body.dark-mode select {
@@ -97,6 +111,7 @@ body.dark-mode input:focus {
     display: flex;
     align-items: center;
     position: relative;
+    width: 100%;
 }
 
 .password-box input {
@@ -192,9 +207,15 @@ body.dark-mode .dark-mode-toggle {
 }
 
 /* Mobile adjustments */
-@media (max-width: 480px) {
+@media (max-width: 700px) {
     .form-box {
         padding: 25px 20px;
+        max-width: 450px;
+    }
+    
+    .two-columns {
+        grid-template-columns: 1fr;
+        gap: 0;
     }
     
     h2 {
