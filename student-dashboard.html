@@ -29,50 +29,37 @@
 
         <!-- TOP HEADER -->
         <div class="top-bar">
-            <h1><i class="fas fa-user-graduate"></i> Welcome Student</h1>
+            <h1><i class="fas fa-user-graduate"></i> Welcome <span id="studentName">Student</span></h1>
         </div>
 
-        <!-- Search bar -->
-        <div style="margin: 15px 0;">
-            <input type="text" id="searchInput" placeholder="🔍 Search your requests..." 
-            style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px;">
-        </div>
-
-        <!-- STATS -->
+        <!-- STATS SECTION -->
         <section class="stats">
             <div class="card">
                 <h3><i class="fas fa-clipboard-list"></i> Total Requests</h3>
-                <p>--</p>
+                <p id="totalCount">0</p>
             </div>
 
             <div class="card">
                 <h3><i class="fas fa-clock"></i> Pending</h3>
-                <p>--</p>
+                <p id="pendingCount">0</p>
             </div>
 
             <div class="card">
                 <h3><i class="fas fa-check-circle"></i> Completed</h3>
-                <p>--</p>
+                <p id="completedCount">0</p>
             </div>
         </section>
 
-        <!-- REQUEST SECTION -->
+        <!-- SEARCH BAR -->
+        <div id="searchContainer" style="margin: 15px 0;">
+            <input type="text" id="searchInput" placeholder="🔍 Search your requests..." 
+            style="width: 100%; padding: 12px; border-radius: 30px; border: 1px solid #ddd; font-size: 16px;">
+        </div>
+
+        <!-- REQUESTS SECTION -->
         <section class="requests">
-
             <h2><i class="fas fa-history"></i> Recent Requests</h2>
-
-            <div class="request-card">
-                <h3><i class="fas fa-lightbulb"></i> Broken Light</h3>
-                <p><i class="fas fa-door-open"></i> Room: 102</p>
-                <span class="status pending"><i class="fas fa-hourglass-half"></i> Pending</span>
-            </div>
-
-            <div class="request-card">
-                <h3><i class="fas fa-tint"></i> Water Leak</h3>
-                <p><i class="fas fa-door-open"></i> Room: 204</p>
-                <span class="status completed"><i class="fas fa-check"></i> Completed</span>
-            </div>
-
+            <div id="requestsList"></div>
         </section>
 
     </main>

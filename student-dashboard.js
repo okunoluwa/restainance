@@ -95,23 +95,14 @@ function filterRequests() {
     });
 }
 
-function addSearchBar() {
-    const main = document.querySelector('.main');
-    if (!main) return;
-    const topBar = document.querySelector('.top-bar');
-    if (!topBar || document.getElementById('searchInput')) return;
-    
-    const searchDiv = document.createElement('div');
-    searchDiv.style.margin = '15px 0';
-    searchDiv.innerHTML = '<input type="text" id="searchInput" placeholder="🔍 Search your requests..." style="width:100%; padding:12px; border-radius:30px; border:1px solid #ddd; font-size:16px;">';
-    topBar.insertAdjacentElement('afterend', searchDiv);
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) searchInput.addEventListener('keyup', filterRequests);
-}
-
 function exportToPDF() {
     const requests = getRequests();
     const myRequests = requests.filter(req => req.studentNumber === currentStudentNumber);
+    
+    if (myRequests.length === 0) {
+        alert('No requests to export!');
+        return;
+    }
     
     let html = `<html><head><title>My Requests</title></head><body>
         <h1>My Maintenance Requests</h1>
@@ -120,7 +111,7 @@ function exportToPDF() {
         <p>Generated: ${new Date().toLocaleString()}</p>
         <table border="1" cellpadding="5">
             <tr><th>Title</th><th>Room</th><th>Status</th><th>Date</th></tr>
-            ${myRequests.map(r => `<tr><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.room)}</td><td>${r.status}</td><td>${r.date}</td></tr>`).join('')}
+            ${myRequests.map(r => `<tr><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.title)}</td><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.room)}</td><td style="border:1px solid #ddd; padding:8px">${r.status}</td><td style="border:1px solid #ddd; padding:8px">${r.date}</td></tr>`).join('')}
         </table></body></html>`;
     
     const blob = new Blob([html], { type: 'application/pdf' });
@@ -132,13 +123,12 @@ function exportToPDF() {
 }
 
 function addExportButtonAtBottom() {
-    const requestsSection = document.querySelector('.requests');
-    if (!requestsSection) return;
+    const requestsList = document.getElementById('requestsList');
+    if (!requestsList) return;
     
     const existingBtn = document.querySelector('.export-btn-bottom');
     if (existingBtn) existingBtn.remove();
     
-    // Check if there are requests before adding button
     const requests = getRequests();
     const myRequests = requests.filter(req => req.studentNumber === currentStudentNumber);
     
@@ -150,53 +140,50 @@ function addExportButtonAtBottom() {
     exportBtn.style.cssText = 'background:#4caf50; color:white; border:none; border-radius:30px; padding:12px 20px; margin-top:20px; width:100%; cursor:pointer; font-weight:600;';
     exportBtn.onclick = exportToPDF;
     
-    requestsSection.appendChild(exportBtn);
+    requestsList.appendChild(exportBtn);
 }
 
 function updateStats(requests) {
     const myRequests = requests.filter(req => req.studentNumber === currentStudentNumber);
-    const totalEl = document.querySelector('.card:first-child p');
-    const pendingEl = document.querySelector('.card:nth-child(2) p');
-    const completedEl = document.querySelector('.card:nth-child(3) p');
+    const totalEl = document.getElementById('totalCount');
+    const pendingEl = document.getElementById('pendingCount');
+    const completedEl = document.getElementById('completedCount');
+    
     if (totalEl) totalEl.innerHTML = myRequests.length;
     if (pendingEl) pendingEl.innerHTML = myRequests.filter(r => r.status === 'pending').length;
     if (completedEl) completedEl.innerHTML = myRequests.filter(r => r.status === 'completed').length;
 }
 
-function loadRecentRequests() {
+function loadRequests() {
     const requests = getRequests();
     const myRequests = requests.filter(req => req.studentNumber === currentStudentNumber);
-    const recentRequests = [...myRequests].reverse().slice(0, 5);
+    const requestsList = document.getElementById('requestsList');
     
-    const requestsSection = document.querySelector('.requests');
-    if (!requestsSection) return;
+    if (!requestsList) return;
     
-    const oldCards = requestsSection.querySelectorAll('.request-card:not(.no-requests-card)');
-    oldCards.forEach(card => card.remove());
+    // Clear existing content
+    requestsList.innerHTML = '';
     
+    // Remove old export button if exists
     const oldExportBtn = document.querySelector('.export-btn-bottom');
     if (oldExportBtn) oldExportBtn.remove();
     
-    if (recentRequests.length === 0) {
-        const emptyDiv = document.createElement('div');
-        emptyDiv.className = 'request-card no-requests-card';
-        emptyDiv.style.textAlign = 'center';
-        emptyDiv.innerHTML = '<i class="fas fa-inbox"></i> No requests yet. <a href="report.html">Report an issue</a>';
-        requestsSection.appendChild(emptyDiv);
+    if (myRequests.length === 0) {
+        requestsList.innerHTML = '<div class="request-card" style="text-align:center;"><i class="fas fa-inbox"></i> No requests yet. <a href="report.html">Report an issue</a></div>';
     } else {
-        recentRequests.forEach(request => {
+        myRequests.slice().reverse().forEach(request => {
             const priorityColor = request.priority === 'High' ? '#dc3545' : (request.priority === 'Low' ? '#4caf50' : '#ff9800');
             const card = document.createElement('div');
             card.className = 'request-card';
             card.innerHTML = `
-                <h3><i class="fas fa-wrench"></i> ${escapeHtml(request.title)} ${request.priority ? `<span style="background:${priorityColor}; color:white; padding:2px 10px; border-radius:20px; font-size:10px;">${request.priority}</span>` : ''}</h3>
+                <h3><i class="fas fa-wrench"></i> ${escapeHtml(request.title)} ${request.priority ? `<span style="background:${priorityColor}; color:white; padding:2px 10px; border-radius:20px; font-size:10px; margin-left:8px;">${request.priority}</span>` : ''}</h3>
                 <p><i class="fas fa-door-open"></i> Room: ${escapeHtml(request.room)}</p>
                 <p><i class="fas fa-tag"></i> Category: ${escapeHtml(request.category) || 'General'}</p>
                 <p><i class="fas fa-calendar-alt"></i> Submitted: ${request.date}</p>
                 <span class="status ${request.status}">${request.status.toUpperCase()}</span>
                 <div style="margin-top:10px"><button onclick="location.href='my-requests.html'" style="background:#af954c; color:white; border:none; border-radius:30px; padding:10px 15px; cursor:pointer;"><i class="fas fa-eye"></i> View Details</button></div>
             `;
-            requestsSection.appendChild(card);
+            requestsList.appendChild(card);
         });
     }
     
@@ -204,17 +191,18 @@ function loadRecentRequests() {
     updateStats(requests);
 }
 
-function goToReport() {
-    window.location.href = 'report.html';
+// Initialize search
+function initSearch() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keyup', filterRequests);
+    }
 }
-
-window.goToReport = goToReport;
 
 document.addEventListener('DOMContentLoaded', function() {
     initDarkMode();
     
     const user = getCurrentUser();
-    
     currentStudentNumber = getCurrentStudent();
     
     if (!currentStudentNumber) {
@@ -225,13 +213,15 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
-    const welcomeHeader = document.querySelector('.top-bar h1');
-    if (welcomeHeader) {
+    const studentNameSpan = document.getElementById('studentName');
+    if (studentNameSpan) {
         const displayName = currentStudentName || (user && user.fullname) || currentStudentNumber;
-        welcomeHeader.innerHTML = `<i class="fas fa-user-graduate"></i> Welcome ${escapeHtml(displayName)}`;
+        studentNameSpan.innerHTML = escapeHtml(displayName);
     }
     
-    addSearchBar();
-    loadRecentRequests();
-    setInterval(loadRecentRequests, 10000);
+    initSearch();
+    loadRequests();
+    
+    // Auto-refresh every 10 seconds
+    setInterval(loadRequests, 10000);
 });
