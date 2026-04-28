@@ -338,3 +338,17 @@ body.dark-mode .dark-mode-toggle {
         font-size: 11px !important;
     }
 }
+
+/* ========== FIX FOR STUDENT NUMBER IN DARK MODE ========== */
+body.dark-mode input#studentNumber,
+body.dark-mode input#studentNumber:focus,
+body.dark-mode input#studentNumber[readonly] {
+    background-color: #2a2a3e !important;
+    color: #ffffff !important;
+    border: 1px solid #3a3a4e !important;
+}
+
+body.dark-mode input[readonly] {
+    background-color: #2a2a3e !important;
+    color: #ffffff !important;
+}
