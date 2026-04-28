@@ -1,4 +1,4 @@
-// my-requests.js - COMPLETE WORKING VERSION
+// my-requests.js - COMPLETE WORKING VERSION WITH IMAGE DISPLAY
 
 // ========== DARK MODE FUNCTION (SIDEBAR BUTTON) ==========
 function initDarkMode() {
@@ -135,21 +135,40 @@ function filterRequests() {
     });
 }
 
-// ---------- Export to PDF ----------
+// ---------- Export to PDF (with images) ----------
 function exportToPDF() {
     const allRequests = getRequests();
     const currentStudent = getCurrentStudentNumber();
     if (!currentStudent) return;
     const myRequests = allRequests.filter(req => req.studentNumber === currentStudent);
     
-    let html = `<html><head><title>My Requests</title></head><body>
+    let html = `<html><head><title>My Requests</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; vertical-align: top; }
+        th { background-color: #f2f2f2; }
+        .request-image { max-width: 200px; max-height: 200px; }
+    </style>
+    </head><body>
         <h1>My Maintenance Requests</h1>
         <p>Student: ${escapeHtml(currentStudent)}</p>
         <p>Generated: ${new Date().toLocaleString()}</p>
-        <table border="1" cellpadding="5">
-            <tr><th>Title</th><th>Room</th><th>Status</th><th>Date</th></tr>
-            ${myRequests.map(r => `<tr><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.title)}</td><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.room)}</td><td style="border:1px solid #ddd; padding:8px">${r.status}</td><td style="border:1px solid #ddd; padding:8px">${r.date}</td></tr>`).join('')}
-        </table></body></html>`;
+        <table>
+            <tr><th>Title</th><th>Room</th><th>Category</th><th>Description</th><th>Status</th><th>Date</th><th>Image</th></tr>
+            ${myRequests.map(r => `
+                <tr>
+                    <td>${escapeHtml(r.title)}</td>
+                    <td>${escapeHtml(r.room)}</td>
+                    <td>${escapeHtml(r.category) || 'General'}</td>
+                    <td>${escapeHtml(r.description)}</td>
+                    <td>${r.status}</td>
+                    <td>${r.date}</td>
+                    <td>${r.image ? '<img src="' + r.image + '" style="max-width:150px; max-height:150px;" />' : 'No image'}</td>
+                </tr>
+            `).join('')}
+        </table>
+    </body></html>`;
     
     const blob = new Blob([html], { type: 'application/pdf' });
     const link = document.createElement('a');
@@ -159,7 +178,7 @@ function exportToPDF() {
     alert('✅ PDF exported!');
 }
 
-// ---------- Add Export Button at Bottom (only if requests exist) ----------
+// ---------- Add Export Button at Bottom ----------
 function addExportButtonAtBottom() {
     const container = document.getElementById('requestsContainer');
     if (!container) return;
@@ -167,7 +186,6 @@ function addExportButtonAtBottom() {
     const existingBtn = document.querySelector('.export-btn-bottom');
     if (existingBtn) existingBtn.remove();
     
-    // Check if there are requests before adding button
     const currentStudent = getCurrentStudentNumber();
     if (!currentStudent) return;
     
@@ -233,7 +251,19 @@ function deleteRequest(id) {
     }
 }
 
-// ---------- MAIN RENDER FUNCTION ----------
+// ---------- Function to toggle image visibility ----------
+function toggleImage(imageId) {
+    const img = document.getElementById(imageId);
+    if (img) {
+        if (img.style.display === 'none') {
+            img.style.display = 'block';
+        } else {
+            img.style.display = 'none';
+        }
+    }
+}
+
+// ---------- MAIN RENDER FUNCTION (WITH IMAGE DISPLAY) ----------
 function renderRequests() {
     const container = document.getElementById('requestsContainer');
     if (!container) {
@@ -274,6 +304,12 @@ function renderRequests() {
         if (request.status === 'inprogress') statusIcon = '<i class="fas fa-spinner fa-pulse"></i>';
         if (request.status === 'completed') statusIcon = '<i class="fas fa-check-circle"></i>';
 
+        // Generate unique image ID for this request
+        const imageId = `request_image_${request.id}`;
+        
+        // Check if there's an image
+        const hasImage = request.image && request.image.length > 0;
+        
         const card = document.createElement('div');
         card.className = 'request-card';
         card.innerHTML = `
@@ -284,6 +320,16 @@ function renderRequests() {
             <p><i class="fas fa-tag"></i> <strong>Category:</strong> ${escapeHtml(request.category) || 'General'}</p>
             <p><i class="fas fa-align-left"></i> <strong>Description:</strong> ${escapeHtml(request.description)}</p>
             <p><i class="fas fa-calendar-alt"></i> <strong>Submitted:</strong> ${request.date}</p>
+            ${hasImage ? `
+                <div class="image-section" style="margin: 10px 0;">
+                    <button onclick="toggleImage('${imageId}')" style="background:#af954c; color:white; border:none; border-radius:20px; padding:5px 12px; cursor:pointer; font-size:12px;">
+                        <i class="fas fa-image"></i> ${document.getElementById(imageId)?.style.display !== 'none' ? 'Hide Image' : 'Show Image'}
+                    </button>
+                    <div id="${imageId}" style="margin-top:10px; ${hasImage && request.image ? 'display:block' : 'display:none'}">
+                        <img src="${request.image}" alt="Request Image" style="max-width:100%; max-height:250px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                    </div>
+                </div>
+            ` : ''}
             <span class="status ${request.status}">${statusIcon} ${request.status.toUpperCase()}</span>
             ${request.status === 'completed' && !rating ? `
                 <div class="rating"><strong><i class="fas fa-star"></i> Rate: </strong>
@@ -308,7 +354,7 @@ function renderRequests() {
         container.appendChild(card);
     });
     
-    // Add export button at the bottom (only if requests exist)
+    // Add export button at the bottom
     addExportButtonAtBottom();
 }
 
@@ -318,6 +364,7 @@ window.addComment = addComment;
 window.editRequest = editRequest;
 window.deleteRequest = deleteRequest;
 window.exportToPDF = exportToPDF;
+window.toggleImage = toggleImage;
 
 // ---------- Initialization ----------
 document.addEventListener('DOMContentLoaded', function() {
