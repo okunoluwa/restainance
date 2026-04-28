@@ -1,4 +1,4 @@
-// my-requests.js - PROPER WORKING VERSION
+// my-requests.js - PROPER WORKING VERSION WITH COMMENTS
 
 // ========== DARK MODE FUNCTION ==========
 function initDarkMode() {
@@ -52,6 +52,42 @@ function getCurrentStudentNumber() {
     }
     return studentNum;
 }
+
+// ========== COMMENT FUNCTIONS ==========
+function getComments() {
+    const data = localStorage.getItem('comments');
+    if (!data) return [];
+    return JSON.parse(data);
+}
+
+function saveComments(comments) {
+    localStorage.setItem('comments', JSON.stringify(comments));
+}
+
+function addComment(requestId, comment, userType) {
+    if (!comment || !comment.trim()) {
+        alert('Please enter a comment.');
+        return;
+    }
+    let comments = getComments();
+    comments.push({
+        requestId: requestId,
+        comment: comment.trim(),
+        userType: userType,
+        date: new Date().toLocaleString(),
+        timestamp: Date.now()
+    });
+    saveComments(comments);
+    renderRequests();
+    const inputField = document.getElementById(`comment_${requestId}`);
+    if (inputField) inputField.value = '';
+}
+
+function getCommentsForRequest(requestId) {
+    const comments = getComments();
+    return comments.filter(c => c.requestId === requestId);
+}
+// ========== END COMMENT FUNCTIONS ==========
 
 // Search filter
 function filterRequests() {
@@ -130,7 +166,7 @@ function toggleImage(imgId) {
     }
 }
 
-// Main render function
+// Main render function WITH COMMENTS
 function renderRequests() {
     const container = document.getElementById('requestsContainer');
     if (!container) {
@@ -182,6 +218,8 @@ function renderRequests() {
         const hasImage = request.image && request.image.length > 0;
         const imageId = `img_${request.id}`;
         
+        const comments = getCommentsForRequest(request.id);
+        
         const card = document.createElement('div');
         card.className = 'request-card';
         card.innerHTML = `
@@ -206,6 +244,29 @@ function renderRequests() {
                     </div>
                 </div>
             ` : '<div style="margin:10px 0; color:#999;"><i class="fas fa-image"></i> No image attached</div>'}
+            
+            <!-- COMMENT SECTION -->
+            <div class="comments-section">
+                <strong><i class="fas fa-comments"></i> Comments (${comments.length})</strong>
+                <div style="margin-top:10px;">
+                    ${comments.slice(-3).map(c => `
+                        <div class="comment">
+                            <strong><i class="fas ${c.userType === 'staff' ? 'fa-user-tie' : 'fa-user-graduate'}"></i> ${c.userType === 'staff' ? 'Staff' : 'Student'}:</strong>
+                            <p style="margin:5px 0 0 0;">${escapeHtml(c.comment)}</p>
+                            <small><i class="far fa-clock"></i> ${c.date}</small>
+                        </div>
+                    `).join('')}
+                    ${comments.length === 0 ? '<div style="color:#999; padding:10px;">No comments yet.</div>' : ''}
+                </div>
+                <div class="add-comment">
+                    <input type="text" id="comment_${request.id}" placeholder="Add a comment...">
+                    <button onclick="addComment(${request.id}, document.getElementById('comment_${request.id}').value, 'student')">
+                        <i class="fas fa-paper-plane"></i> Post
+                    </button>
+                </div>
+            </div>
+            <!-- END COMMENT SECTION -->
+            
             <div class="actions" style="display:flex; gap:10px; margin-top:15px;">
                 <button onclick="deleteRequest(${request.id})" style="background:#dc3545; color:white; border:none; border-radius:25px; padding:10px; cursor:pointer; flex:1;">
                     <i class="fas fa-trash-alt"></i> Delete
@@ -250,3 +311,4 @@ window.deleteRequest = deleteRequest;
 window.exportToPDF = exportToPDF;
 window.toggleImage = toggleImage;
 window.filterRequests = filterRequests;
+window.addComment = addComment;
