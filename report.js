@@ -22,6 +22,17 @@ function initDarkMode() {
     });
 }
 
+// Helper function to escape HTML
+function escapeHtml(str) {
+    if (!str) return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 // Wait for the page to fully load
 document.addEventListener('DOMContentLoaded', function() {
     
@@ -141,17 +152,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (formElement) {
             mainContainer.insertBefore(userBanner, formElement);
         }
-    }
-    
-    // Helper function to escape HTML
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
     }
     
     // Handle form submission
