@@ -8,11 +8,12 @@
 body {
     background: #f5f5f5;
     padding-bottom: 70px;
-    transition: background 0.3s;
+    transition: background 0.3s, color 0.3s;
 }
 
 body.dark-mode {
     background: #121212;
+    color: #e0e0e0;
 }
 
 .container {
@@ -66,6 +67,10 @@ body.dark-mode .sidebar {
     transition: color 0.3s;
 }
 
+body.dark-mode .sidebar a {
+    color: #aaa;
+}
+
 .sidebar a::before {
     font-size: 20px;
 }
@@ -80,7 +85,7 @@ body.dark-mode .sidebar {
 }
 
 body.dark-mode .sidebar .active a {
-    color: #af954c;
+    color: #c4a85c;
 }
 
 /* MAIN */
@@ -104,7 +109,7 @@ body.dark-mode .sidebar .active a {
 }
 
 body.dark-mode .top-bar h1 {
-    color: #eee;
+    color: #ffffff;
 }
 
 .top-bar button {
@@ -148,7 +153,7 @@ body.dark-mode .top-bar h1 {
 }
 
 body.dark-mode .card {
-    background: #1e1e2e;
+    background: #2a2a3e;
 }
 
 .card h3 {
@@ -158,13 +163,17 @@ body.dark-mode .card {
 }
 
 body.dark-mode .card h3 {
-    color: #aaa;
+    color: #cccccc;
 }
 
 .card p {
     font-size: 28px;
     font-weight: bold;
     color: #af954c;
+}
+
+body.dark-mode .card p {
+    color: #c4a85c;
 }
 
 .requests h2 {
@@ -174,7 +183,7 @@ body.dark-mode .card h3 {
 }
 
 body.dark-mode .requests h2 {
-    color: #eee;
+    color: #ffffff;
 }
 
 /* REQUEST CARDS */
@@ -193,7 +202,7 @@ body.dark-mode .requests h2 {
 }
 
 body.dark-mode .request-card {
-    background: #1e1e2e;
+    background: #2a2a3e;
 }
 
 .request-card h3 {
@@ -207,7 +216,7 @@ body.dark-mode .request-card {
 }
 
 body.dark-mode .request-card h3 {
-    color: #eee;
+    color: #ffffff;
 }
 
 .request-card p {
@@ -217,7 +226,7 @@ body.dark-mode .request-card h3 {
 }
 
 body.dark-mode .request-card p {
-    color: #aaa;
+    color: #cccccc;
 }
 
 /* STATUS BADGES */
@@ -245,9 +254,20 @@ body.dark-mode .request-card p {
     color: #4caf50;
 }
 
-body.dark-mode .pending { background: #3a2a1a; }
-body.dark-mode .inprogress { background: #1a2a3a; }
-body.dark-mode .completed { background: #1a2a1a; }
+body.dark-mode .pending {
+    background: #3a2a1a;
+    color: #ffb74d;
+}
+
+body.dark-mode .inprogress {
+    background: #1a2a3a;
+    color: #64b5f6;
+}
+
+body.dark-mode .completed {
+    background: #1a2a1a;
+    color: #81c784;
+}
 
 /* SEARCH */
 #searchInput {
@@ -259,13 +279,17 @@ body.dark-mode .completed { background: #1a2a1a; }
     font-size: 15px;
     margin: 15px 0;
     outline: none;
-    transition: background 0.3s;
+    transition: background 0.3s, color 0.3s;
 }
 
 body.dark-mode #searchInput {
     background: #2a2a3e;
     border-color: #3a3a4e;
-    color: #eee;
+    color: #ffffff;
+}
+
+body.dark-mode #searchInput::placeholder {
+    color: #aaaaaa;
 }
 
 /* EXPORT BUTTON */
@@ -299,8 +323,8 @@ body.dark-mode #searchInput {
 }
 
 body.dark-mode .dark-mode-toggle {
-    background: #1e1e2e;
-    color: #eee;
+    background: #2a2a3e;
+    color: #ffffff;
 }
 
 /* FOOTER */
@@ -325,7 +349,7 @@ footer {
         margin-bottom: 30px;
         color: #333;
     }
-    body.dark-mode .sidebar h2 { color: #eee; }
+    body.dark-mode .sidebar h2 { color: #ffffff; }
     .sidebar ul { flex-direction: column; align-items: stretch; }
     .sidebar a { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 12px 16px; font-size: 13px; }
     .sidebar a::before { font-size: 18px; }
@@ -341,15 +365,20 @@ footer {
     }
     body.dark-mode footer {
         background: #1e1e2e;
-        color: #666;
+        color: #aaaaaa;
     }
     .dark-mode-toggle { top: 20px; right: 20px; }
 }
 
 /* ========== FIX FOR MODAL POPUP IN DARK MODE ========== */
+#detailModal div[style*="background"] {
+    background: white !important;
+    color: #333 !important;
+}
+
 body.dark-mode #detailModal div[style*="background"] {
     background: #1e1e2e !important;
-    color: #eee !important;
+    color: #e0e0e0 !important;
 }
 
 body.dark-mode #detailModal h3,
@@ -357,7 +386,7 @@ body.dark-mode #detailModal h4,
 body.dark-mode #detailModal p,
 body.dark-mode #detailModal strong,
 body.dark-mode #detailModal span {
-    color: #eee !important;
+    color: #e0e0e0 !important;
 }
 
 body.dark-mode #detailModal div[style*="border-bottom"] {
@@ -369,5 +398,6 @@ body.dark-mode #detailModal div[style*="border-top"] {
 }
 
 body.dark-mode #detailModal button[onclick="closeModal()"] {
-    color: #aaa !important;
+    color: #ffffff !important;
+    background: #af954c !important;
 }

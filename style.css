@@ -12,6 +12,7 @@ body {
 
 body.dark-mode {
     background: #121212;
+    color: #e0e0e0;
 }
 
 /* NAVBAR */
@@ -38,6 +39,10 @@ body.dark-mode .navbar {
     color: #af954c;
 }
 
+body.dark-mode .logo {
+    color: #c4a85c;
+}
+
 /* HAMBURGER MENU ICON - hidden on desktop */
 .hamburger {
     display: none;
@@ -50,7 +55,7 @@ body.dark-mode .navbar {
 }
 
 body.dark-mode .hamburger {
-    color: #af954c;
+    color: #c4a85c;
 }
 
 .nav-links {
@@ -68,7 +73,15 @@ body.dark-mode .hamburger {
 }
 
 body.dark-mode .nav-links a {
-    color: #ddd;
+    color: #cccccc;
+}
+
+.nav-links a:hover {
+    color: #af954c;
+}
+
+body.dark-mode .nav-links a:hover {
+    color: #c4a85c;
 }
 
 .btn {
@@ -77,6 +90,10 @@ body.dark-mode .nav-links a {
     border-radius: 30px;
     color: white !important;
     font-weight: 600;
+}
+
+body.dark-mode .btn {
+    background: #c4a85c;
 }
 
 /* HERO */
@@ -104,6 +121,7 @@ body.dark-mode .hero {
     font-size: 1rem;
     margin: 15px 0;
     line-height: 1.5;
+    color: rgba(255,255,255,0.9);
 }
 
 .cta {
@@ -124,8 +142,8 @@ body.dark-mode .hero {
 }
 
 body.dark-mode .cta {
-    background: #1e1e2e;
-    color: #af954c;
+    background: #2a2a3e;
+    color: #c4a85c;
 }
 
 /* FEATURES */
@@ -147,7 +165,7 @@ body.dark-mode .features {
 }
 
 body.dark-mode .features h2 {
-    color: #eee;
+    color: #ffffff;
 }
 
 .feature-container {
@@ -167,7 +185,7 @@ body.dark-mode .features h2 {
 }
 
 body.dark-mode .feature {
-    background: #1e1e2e;
+    background: #2a2a3e;
 }
 
 .feature:active {
@@ -180,6 +198,10 @@ body.dark-mode .feature {
     color: #af954c;
 }
 
+body.dark-mode .feature h3 {
+    color: #c4a85c;
+}
+
 .feature p {
     font-size: 0.9rem;
     color: #666;
@@ -187,7 +209,7 @@ body.dark-mode .feature {
 }
 
 body.dark-mode .feature p {
-    color: #aaa;
+    color: #cccccc;
 }
 
 /* CTA SECTION */
@@ -207,6 +229,16 @@ body.dark-mode .cta-section {
     margin-bottom: 20px;
 }
 
+.cta-section .cta {
+    background: white;
+    color: #7d6d2e;
+}
+
+body.dark-mode .cta-section .cta {
+    background: #2a2a3e;
+    color: #c4a85c;
+}
+
 /* FOOTER */
 footer {
     background: white;
@@ -219,7 +251,7 @@ footer {
 
 body.dark-mode footer {
     background: #1e1e2e;
-    color: #666;
+    color: #aaaaaa;
 }
 
 /* DARK MODE TOGGLE */
@@ -391,6 +423,7 @@ html, body {
 
 body.dark-mode .dark-mode-menu-item a {
     border-top-color: rgba(255,255,255,0.1);
+    color: #cccccc;
 }
 
 /* Floating dark mode button */

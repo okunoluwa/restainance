@@ -8,11 +8,12 @@
 body {
     background: #f5f5f5;
     padding-bottom: 70px;
-    transition: background 0.3s;
+    transition: background 0.3s, color 0.3s;
 }
 
 body.dark-mode {
     background: #121212;
+    color: #e0e0e0;
 }
 
 .container {
@@ -65,6 +66,10 @@ body.dark-mode .sidebar {
     padding: 8px 0;
 }
 
+body.dark-mode .sidebar a {
+    color: #aaa;
+}
+
 .sidebar a::before {
     font-size: 20px;
 }
@@ -76,6 +81,10 @@ body.dark-mode .sidebar {
 
 .sidebar .active a {
     color: #bc9650;
+}
+
+body.dark-mode .sidebar .active a {
+    color: #d4aa5c;
 }
 
 /* MAIN */
@@ -91,7 +100,7 @@ body.dark-mode .sidebar {
 }
 
 body.dark-mode .main h1 {
-    color: #eee;
+    color: #ffffff;
 }
 
 /* STUDENT INFO BAR */
@@ -136,7 +145,11 @@ body.dark-mode .main h1 {
 body.dark-mode .search-bar input {
     background: #2a2a3e;
     border-color: #3a3a4e;
-    color: #eee;
+    color: #ffffff;
+}
+
+body.dark-mode .search-bar input::placeholder {
+    color: #aaaaaa;
 }
 
 /* EXPORT BUTTON */
@@ -164,7 +177,7 @@ body.dark-mode .search-bar input {
 }
 
 body.dark-mode .request-card {
-    background: #1e1e2e;
+    background: #2a2a3e;
 }
 
 .request-card h3 {
@@ -178,7 +191,7 @@ body.dark-mode .request-card {
 }
 
 body.dark-mode .request-card h3 {
-    color: #eee;
+    color: #ffffff;
 }
 
 .request-card p {
@@ -188,7 +201,7 @@ body.dark-mode .request-card h3 {
 }
 
 body.dark-mode .request-card p {
-    color: #aaa;
+    color: #cccccc;
 }
 
 /* STATUS */
@@ -201,12 +214,46 @@ body.dark-mode .request-card p {
     margin: 8px 0;
 }
 
+.pending {
+    background: #fff3e0;
+    color: #ff9800;
+}
+
+.inprogress {
+    background: #e3f2fd;
+    color: #2196f3;
+}
+
+.completed {
+    background: #e8f5e9;
+    color: #4caf50;
+}
+
+body.dark-mode .pending {
+    background: #3a2a1a;
+    color: #ffb74d;
+}
+
+body.dark-mode .inprogress {
+    background: #1a2a3a;
+    color: #64b5f6;
+}
+
+body.dark-mode .completed {
+    background: #1a2a1a;
+    color: #81c784;
+}
+
 /* RATING */
 .rating span {
     font-size: 22px;
     cursor: pointer;
     color: #ddd;
     transition: color 0.2s;
+}
+
+body.dark-mode .rating span {
+    color: #666;
 }
 
 .rating span:hover {
@@ -232,7 +279,32 @@ body.dark-mode .comments-section {
 }
 
 body.dark-mode .comment {
-    background: #2a2a3e;
+    background: #1e1e2e;
+}
+
+.comment strong {
+    color: #333;
+}
+
+body.dark-mode .comment strong {
+    color: #ffffff;
+}
+
+.comment p {
+    color: #555;
+    margin-top: 5px;
+}
+
+body.dark-mode .comment p {
+    color: #cccccc;
+}
+
+.comment small {
+    color: #999;
+}
+
+body.dark-mode .comment small {
+    color: #888;
 }
 
 .add-comment {
@@ -251,9 +323,13 @@ body.dark-mode .comment {
 }
 
 body.dark-mode .add-comment input {
-    background: #2a2a3e;
+    background: #1e1e2e;
     border-color: #3a3a4e;
-    color: #eee;
+    color: #ffffff;
+}
+
+body.dark-mode .add-comment input::placeholder {
+    color: #aaaaaa;
 }
 
 .add-comment button {
@@ -263,6 +339,10 @@ body.dark-mode .add-comment input {
     border: none;
     border-radius: 25px;
     cursor: pointer;
+}
+
+body.dark-mode .add-comment button {
+    background: #c4a85c;
 }
 
 /* ACTION BUTTONS */
@@ -302,6 +382,18 @@ body.dark-mode .add-comment input {
     color: #888;
 }
 
+body.dark-mode .empty {
+    color: #aaaaaa;
+}
+
+.empty a {
+    color: #bc9650;
+}
+
+body.dark-mode .empty a {
+    color: #d4aa5c;
+}
+
 /* DARK MODE TOGGLE */
 .dark-mode-toggle {
     position: fixed;
@@ -320,8 +412,8 @@ body.dark-mode .add-comment input {
 }
 
 body.dark-mode .dark-mode-toggle {
-    background: #1e1e2e;
-    color: #eee;
+    background: #2a2a3e;
+    color: #ffffff;
 }
 
 /* FOOTER */
@@ -346,7 +438,7 @@ footer {
         margin-bottom: 30px;
         color: #333;
     }
-    body.dark-mode .sidebar h2 { color: #eee; }
+    body.dark-mode .sidebar h2 { color: #ffffff; }
     .sidebar ul { flex-direction: column; align-items: stretch; }
     .sidebar a { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 12px 16px; font-size: 13px; }
     .main { padding: 30px; }
@@ -360,7 +452,7 @@ footer {
     }
     body.dark-mode footer {
         background: #1e1e2e;
-        color: #666;
+        color: #aaaaaa;
     }
     .dark-mode-toggle { top: 20px; right: 20px; }
 }

@@ -8,11 +8,12 @@
 body {
     background: #f5f5f5;
     padding-bottom: 70px;
-    transition: background 0.3s;
+    transition: background 0.3s, color 0.3s;
 }
 
 body.dark-mode {
     background: #121212;
+    color: #e0e0e0;
 }
 
 .container {
@@ -65,6 +66,10 @@ body.dark-mode .sidebar {
     padding: 8px 0;
 }
 
+body.dark-mode .sidebar a {
+    color: #aaa;
+}
+
 .sidebar a::before {
     font-size: 20px;
 }
@@ -75,6 +80,10 @@ body.dark-mode .sidebar {
 
 .sidebar .active a {
     color: #b59458;
+}
+
+body.dark-mode .sidebar .active a {
+    color: #c4a85c;
 }
 
 /* MAIN */
@@ -90,7 +99,7 @@ body.dark-mode .sidebar {
 }
 
 body.dark-mode .main h1 {
-    color: #eee;
+    color: #ffffff;
 }
 
 /* TOOLBAR */
@@ -115,13 +124,17 @@ body.dark-mode .main h1 {
 }
 
 body.dark-mode .toolbar button {
-    background: #1e1e2e;
-    color: #eee;
+    background: #2a2a3e;
+    color: #ffffff;
 }
 
 .toolbar button.active {
     background: #b59458;
     color: white;
+}
+
+body.dark-mode .toolbar button.active {
+    background: #c4a85c;
 }
 
 /* SEARCH */
@@ -142,7 +155,11 @@ body.dark-mode .toolbar button {
 body.dark-mode .search-bar input {
     background: #2a2a3e;
     border-color: #3a3a4e;
-    color: #eee;
+    color: #ffffff;
+}
+
+body.dark-mode .search-bar input::placeholder {
+    color: #aaaaaa;
 }
 
 /* REQUEST CARDS */
@@ -161,7 +178,7 @@ body.dark-mode .search-bar input {
 }
 
 body.dark-mode .request-card {
-    background: #1e1e2e;
+    background: #2a2a3e;
 }
 
 .request-card h3 {
@@ -175,7 +192,7 @@ body.dark-mode .request-card {
 }
 
 body.dark-mode .request-card h3 {
-    color: #eee;
+    color: #ffffff;
 }
 
 .request-card p {
@@ -185,7 +202,7 @@ body.dark-mode .request-card h3 {
 }
 
 body.dark-mode .request-card p {
-    color: #aaa;
+    color: #cccccc;
 }
 
 /* PRIORITY BADGES */
@@ -216,9 +233,20 @@ body.dark-mode .request-card p {
     font-weight: bold;
 }
 
-body.dark-mode .priority-high { background: #3a1a1a; color: #ff8888; }
-body.dark-mode .priority-medium { background: #3a2a1a; color: #ffb347; }
-body.dark-mode .priority-low { background: #1a2a1a; color: #6fbf6f; }
+body.dark-mode .priority-high {
+    background: #3a1a1a;
+    color: #ff8888;
+}
+
+body.dark-mode .priority-medium {
+    background: #3a2a1a;
+    color: #ffb74d;
+}
+
+body.dark-mode .priority-low {
+    background: #1a2a1a;
+    color: #81c784;
+}
 
 /* STATUS */
 .status {
@@ -242,12 +270,12 @@ body.dark-mode .priority-low { background: #1a2a1a; color: #6fbf6f; }
     transition: color 0.2s;
 }
 
-.star:hover {
-    color: #ffc107;
+body.dark-mode .star {
+    color: #666;
 }
 
-body.dark-mode .star {
-    color: #555;
+.star:hover {
+    color: #ffc107;
 }
 
 /* COMMENTS */
@@ -269,7 +297,31 @@ body.dark-mode .comments-section {
 }
 
 body.dark-mode .comment {
-    background: #2a2a3e;
+    background: #1e1e2e;
+}
+
+.comment strong {
+    color: #333;
+}
+
+body.dark-mode .comment strong {
+    color: #ffffff;
+}
+
+.comment p {
+    color: #555;
+}
+
+body.dark-mode .comment p {
+    color: #cccccc;
+}
+
+.comment small {
+    color: #999;
+}
+
+body.dark-mode .comment small {
+    color: #888;
 }
 
 .add-comment {
@@ -288,9 +340,13 @@ body.dark-mode .comment {
 }
 
 body.dark-mode .add-comment input {
-    background: #2a2a3e;
+    background: #1e1e2e;
     border-color: #3a3a4e;
-    color: #eee;
+    color: #ffffff;
+}
+
+body.dark-mode .add-comment input::placeholder {
+    color: #aaaaaa;
 }
 
 .add-comment button {
@@ -300,6 +356,10 @@ body.dark-mode .add-comment input {
     border: none;
     border-radius: 25px;
     cursor: pointer;
+}
+
+body.dark-mode .add-comment button {
+    background: #c4a85c;
 }
 
 /* ACTIONS */
@@ -319,9 +379,9 @@ body.dark-mode .add-comment input {
 }
 
 body.dark-mode .actions select {
-    background: #2a2a3e;
+    background: #1e1e2e;
     border-color: #3a3a4e;
-    color: #eee;
+    color: #ffffff;
 }
 
 .actions button {
@@ -337,11 +397,13 @@ body.dark-mode .actions select {
     background: #2196f3;
     color: white;
 }
+.start:hover { background: #0b7dda; }
 
 .done {
     background: #4caf50;
     color: white;
 }
+.done:hover { background: #3e8e41; }
 
 /* CALENDAR */
 .calendar-view {
@@ -354,7 +416,7 @@ body.dark-mode .actions select {
 }
 
 body.dark-mode .calendar-view {
-    background: #1e1e2e;
+    background: #2a2a3e;
 }
 
 .calendar-view.active {
@@ -377,6 +439,10 @@ body.dark-mode .calendar-view {
     cursor: pointer;
 }
 
+body.dark-mode .calendar-header button {
+    background: #c4a85c;
+}
+
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -390,11 +456,12 @@ body.dark-mode .calendar-view {
     background: #f8f9fa;
     cursor: pointer;
     font-size: 14px;
+    color: #333;
 }
 
 body.dark-mode .calendar-day {
-    background: #2a2a3e;
-    color: #eee;
+    background: #1e1e2e;
+    color: #e0e0e0;
 }
 
 .calendar-day.has-request {
@@ -417,6 +484,10 @@ footer {
     color: #999;
 }
 
+body.dark-mode .no-requests {
+    color: #aaaaaa;
+}
+
 @media (min-width: 768px) {
     body { padding-bottom: 0; }
     .container { flex-direction: row; }
@@ -434,7 +505,7 @@ footer {
         margin-bottom: 30px;
         color: #333;
     }
-    body.dark-mode .sidebar h2 { color: #eee; }
+    body.dark-mode .sidebar h2 { color: #ffffff; }
     .sidebar ul { flex-direction: column; align-items: stretch; }
     .sidebar a { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 12px 16px; font-size: 13px; }
     .main { padding: 30px; }
@@ -448,7 +519,7 @@ footer {
     }
     body.dark-mode footer {
         background: #1e1e2e;
-        color: #666;
+        color: #aaaaaa;
     }
 }
 

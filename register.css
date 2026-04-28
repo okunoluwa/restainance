@@ -47,7 +47,7 @@ h2 {
 }
 
 body.dark-mode h2 {
-    color: #eee;
+    color: #ffffff;
 }
 
 form {
@@ -77,7 +77,7 @@ label {
 }
 
 body.dark-mode label {
-    color: #aaa;
+    color: #cccccc;
 }
 
 input, select {
@@ -93,7 +93,11 @@ input, select {
 body.dark-mode input, body.dark-mode select {
     background: #2a2a3e;
     border-color: #3a3a4e;
-    color: #eee;
+    color: #ffffff;
+}
+
+body.dark-mode input::placeholder {
+    color: #aaaaaa;
 }
 
 input:focus, select:focus {
@@ -103,7 +107,8 @@ input:focus, select:focus {
 }
 
 body.dark-mode input:focus {
-    background: #1e1e2e;
+    background: #2a2a3e;
+    border-color: #c4a85c;
 }
 
 /* PASSWORD FIELD */
@@ -125,6 +130,10 @@ body.dark-mode input:focus {
     cursor: pointer;
     font-size: 1.2rem;
     opacity: 0.6;
+}
+
+body.dark-mode .password-box span {
+    color: #cccccc;
 }
 
 /* OPTIONS */
@@ -150,6 +159,10 @@ body.dark-mode input:focus {
     text-decoration: none;
 }
 
+body.dark-mode .options a {
+    color: #c4a85c;
+}
+
 /* BUTTON */
 button {
     margin-top: 25px;
@@ -168,6 +181,10 @@ button:active {
     transform: scale(0.97);
 }
 
+body.dark-mode button {
+    background: #c4a85c;
+}
+
 p {
     margin-top: 20px;
     text-align: center;
@@ -176,13 +193,17 @@ p {
 }
 
 body.dark-mode p {
-    color: #aaa;
+    color: #cccccc;
 }
 
 a {
     color: #af954c;
     text-decoration: none;
     font-weight: 600;
+}
+
+body.dark-mode a {
+    color: #c4a85c;
 }
 
 .dark-mode-toggle {
@@ -202,8 +223,8 @@ a {
 }
 
 body.dark-mode .dark-mode-toggle {
-    background: #1e1e2e;
-    color: #eee;
+    background: #2a2a3e;
+    color: #ffffff;
 }
 
 /* Mobile adjustments */
