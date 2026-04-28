@@ -345,3 +345,29 @@ footer {
     }
     .dark-mode-toggle { top: 20px; right: 20px; }
 }
+
+/* ========== FIX FOR MODAL POPUP IN DARK MODE ========== */
+body.dark-mode #detailModal div[style*="background"] {
+    background: #1e1e2e !important;
+    color: #eee !important;
+}
+
+body.dark-mode #detailModal h3,
+body.dark-mode #detailModal h4,
+body.dark-mode #detailModal p,
+body.dark-mode #detailModal strong,
+body.dark-mode #detailModal span {
+    color: #eee !important;
+}
+
+body.dark-mode #detailModal div[style*="border-bottom"] {
+    border-bottom-color: #3a3a4e !important;
+}
+
+body.dark-mode #detailModal div[style*="border-top"] {
+    border-top-color: #3a3a4e !important;
+}
+
+body.dark-mode #detailModal button[onclick="closeModal()"] {
+    color: #aaa !important;
+}
