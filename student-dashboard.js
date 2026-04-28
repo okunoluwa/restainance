@@ -95,6 +95,70 @@ function filterRequests() {
     });
 }
 
+// ========== NEW: Export single request to PDF ==========
+function exportSingleToPDF(requestId) {
+    const requests = getRequests();
+    const request = requests.find(r => r.id === requestId);
+    
+    if (!request) {
+        alert('Request not found!');
+        return;
+    }
+    
+    let html = `<html><head><title>Request Details - Restainance</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; line-height: 1.6; }
+        .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #af954c; }
+        .header h1 { color: #af954c; margin: 0; }
+        .header p { color: #666; margin: 5px 0; }
+        .details { margin-top: 20px; }
+        .detail-row { margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 10px; }
+        .detail-row strong { display: inline-block; width: 150px; color: #af954c; }
+        .status { display: inline-block; padding: 5px 12px; border-radius: 20px; font-weight: bold; }
+        .status-pending { background: #ff9800; color: white; }
+        .status-inprogress { background: #2196f3; color: white; }
+        .status-completed { background: #4caf50; color: white; }
+        .image-box { margin-top: 15px; text-align: center; }
+        .image-box img { max-width: 100%; max-height: 300px; border-radius: 10px; }
+        .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #999; border-top: 1px solid #ddd; padding-top: 20px; }
+    </style>
+    </head><body>
+        <div class="header">
+            <h1><i class="fas fa-wrench"></i> Maintenance Request Details</h1>
+            <p>Generated: ${new Date().toLocaleString()}</p>
+        </div>
+        <div class="details">
+            <div class="detail-row"><strong>Request ID:</strong> ${request.id}</div>
+            <div class="detail-row"><strong>Title:</strong> ${escapeHtml(request.title)}</div>
+            <div class="detail-row"><strong>Category:</strong> ${escapeHtml(request.category) || 'General'}</div>
+            <div class="detail-row"><strong>Room:</strong> ${escapeHtml(request.room)}</div>
+            <div class="detail-row"><strong>Student Number:</strong> ${escapeHtml(request.studentNumber)}</div>
+            <div class="detail-row"><strong>Student Name:</strong> ${escapeHtml(request.studentName || currentStudentName || request.studentNumber)}</div>
+            <div class="detail-row"><strong>Priority:</strong> ${request.priority || 'Medium'}</div>
+            <div class="detail-row"><strong>Status:</strong> <span class="status status-${request.status}">${request.status.toUpperCase()}</span></div>
+            <div class="detail-row"><strong>Submitted:</strong> ${request.date}</div>
+            <div class="detail-row"><strong>Description:</strong><br>${escapeHtml(request.description)}</div>
+        </div>
+        ${request.image && request.image.length > 0 ? `
+        <div class="image-box">
+            <strong>Attached Image:</strong><br>
+            <img src="${request.image}" alt="Request Image">
+        </div>
+        ` : ''}
+        <div class="footer">
+            <p>Restainance - Student Residence Maintenance App</p>
+        </div>
+    </body></html>`;
+    
+    const blob = new Blob([html], { type: 'application/pdf' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `request-${request.id}.pdf`;
+    link.click();
+    alert('PDF exported for this request!');
+}
+
+// ========== Export all requests to PDF ==========
 function exportToPDF() {
     const requests = getRequests();
     const myRequests = requests.filter(req => req.studentNumber === currentStudentNumber);
@@ -104,15 +168,28 @@ function exportToPDF() {
         return;
     }
     
-    let html = `<html><head><title>My Requests</title></head><body>
-        <h1>My Maintenance Requests</h1>
-        <p>Student Name: ${escapeHtml(currentStudentName || currentStudentNumber)}</p>
-        <p>Student Number: ${escapeHtml(currentStudentNumber)}</p>
-        <p>Generated: ${new Date().toLocaleString()}</p>
+    let html = `<html><head><title>My Requests</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #af954c; }
+        .header h1 { color: #af954c; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #999; }
+    </style>
+    </head><body>
+        <div class="header">
+            <h1>My Maintenance Requests</h1>
+            <p>Student: ${escapeHtml(currentStudentName || currentStudentNumber)}</p>
+            <p>Student Number: ${escapeHtml(currentStudentNumber)}</p>
+            <p>Generated: ${new Date().toLocaleString()}</p>
+        </div>
         <table border="1" cellpadding="5">
             <tr><th>Title</th><th>Room</th><th>Status</th><th>Date</th></tr>
-            ${myRequests.map(r => `</td><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.title)}</td><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.room)}</td><td style="border:1px solid #ddd; padding:8px">${r.status}</td><td style="border:1px solid #ddd; padding:8px">${r.date}</td>`).join('')}
+            ${myRequests.map(r => `<tr><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.title)}</td><td style="border:1px solid #ddd; padding:8px">${escapeHtml(r.room)}</td><td style="border:1px solid #ddd; padding:8px">${r.status}</td><td style="border:1px solid #ddd; padding:8px">${r.date}</td>`).join('')}
         </table>
+        <div class="footer">Restainance - Student Residence Maintenance App</div>
     </body></html>`;
     
     const blob = new Blob([html], { type: 'application/pdf' });
@@ -120,28 +197,7 @@ function exportToPDF() {
     link.href = URL.createObjectURL(blob);
     link.download = `my-requests-${currentStudentNumber}.pdf`;
     link.click();
-    alert('PDF exported!');
-}
-
-function addExportButtonAtBottom() {
-    const requestsList = document.getElementById('requestsList');
-    if (!requestsList) return;
-    
-    const existingBtn = document.querySelector('.export-btn-bottom');
-    if (existingBtn) existingBtn.remove();
-    
-    const requests = getRequests();
-    const myRequests = requests.filter(req => req.studentNumber === currentStudentNumber);
-    
-    if (myRequests.length === 0) return;
-    
-    const exportBtn = document.createElement('button');
-    exportBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Export PDF';
-    exportBtn.className = 'export-btn-bottom';
-    exportBtn.style.cssText = 'background:#4caf50; color:white; border:none; border-radius:30px; padding:12px 20px; margin-top:20px; width:100%; cursor:pointer; font-weight:600;';
-    exportBtn.onclick = exportToPDF;
-    
-    requestsList.appendChild(exportBtn);
+    alert('All requests exported to PDF!');
 }
 
 function updateStats(requests) {
@@ -155,7 +211,7 @@ function updateStats(requests) {
     if (completedEl) completedEl.innerHTML = myRequests.filter(r => r.status === 'completed').length;
 }
 
-// ========== VIEW DETAILS MODAL FUNCTION ==========
+// ========== VIEW DETAILS MODAL FUNCTION (with Export PDF button inside) ==========
 function showRequestDetails(requestId) {
     const requests = getRequests();
     const request = requests.find(r => r.id === requestId);
@@ -194,7 +250,8 @@ function showRequestDetails(requestId) {
                     <p><strong><i class="fas fa-align-left"></i> Description:</strong><br><span style="line-height:1.5;">${escapeHtml(request.description)}</span></p>
                     ${request.image && request.image.length > 0 ? `<p><strong><i class="fas fa-image"></i> Image:</strong><br><img src="${request.image}" style="max-width:100%; max-height:200px; margin-top:10px; border-radius:10px;"></p>` : '<p><em><i class="fas fa-image"></i> No image attached</em></p>'}
                 </div>
-                <div style="padding:15px 20px; border-top:1px solid ${isDarkMode ? '#333' : '#eee'}; text-align:right;">
+                <div style="padding:15px 20px; border-top:1px solid ${isDarkMode ? '#333' : '#eee'}; display:flex; gap:10px; justify-content:flex-end;">
+                    <button onclick="exportSingleToPDF(${request.id})" style="background:#4caf50; color:white; border:none; padding:8px 20px; border-radius:20px; cursor:pointer;"><i class="fas fa-file-pdf"></i> Export PDF</button>
                     <button onclick="closeModal()" style="background:#af954c; color:white; border:none; padding:8px 20px; border-radius:20px; cursor:pointer;"><i class="fas fa-times"></i> Close</button>
                 </div>
             </div>
@@ -214,6 +271,7 @@ function closeModal() {
     document.body.style.overflow = '';
 }
 
+// ========== UPDATED: loadRequests with Export PDF button inside each card ==========
 function loadRequests() {
     const requests = getRequests();
     const myRequests = requests.filter(req => req.studentNumber === currentStudentNumber);
@@ -222,9 +280,6 @@ function loadRequests() {
     if (!requestsList) return;
     
     requestsList.innerHTML = '';
-    
-    const oldExportBtn = document.querySelector('.export-btn-bottom');
-    if (oldExportBtn) oldExportBtn.remove();
     
     if (myRequests.length === 0) {
         requestsList.innerHTML = '<div class="request-card" style="text-align:center;"><i class="fas fa-inbox"></i> No requests yet. <a href="report.html">Report an issue</a></div>';
@@ -239,13 +294,15 @@ function loadRequests() {
                 <p><i class="fas fa-tag"></i> Category: ${escapeHtml(request.category) || 'General'}</p>
                 <p><i class="fas fa-calendar-alt"></i> Submitted: ${request.date}</p>
                 <span class="status ${request.status}">${request.status.toUpperCase()}</span>
-                <div style="margin-top:10px"><button onclick="showRequestDetails(${request.id})" style="background:#af954c; color:white; border:none; border-radius:30px; padding:10px 15px; cursor:pointer;"><i class="fas fa-eye"></i> View Details</button></div>
+                <div style="margin-top:10px; display:flex; gap:10px;">
+                    <button onclick="showRequestDetails(${request.id})" style="background:#af954c; color:white; border:none; border-radius:30px; padding:10px 15px; cursor:pointer; flex:1;"><i class="fas fa-eye"></i> View Details</button>
+                    <button onclick="exportSingleToPDF(${request.id})" style="background:#4caf50; color:white; border:none; border-radius:30px; padding:10px 15px; cursor:pointer; flex:1;"><i class="fas fa-file-pdf"></i> Export PDF</button>
+                </div>
             `;
             requestsList.appendChild(card);
         });
     }
     
-    addExportButtonAtBottom();
     updateStats(requests);
 }
 
@@ -281,3 +338,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     setInterval(loadRequests, 10000);
 });
+
+// Make functions global
+window.exportSingleToPDF = exportSingleToPDF;
+window.exportToPDF = exportToPDF;
+window.showRequestDetails = showRequestDetails;
+window.closeModal = closeModal;
