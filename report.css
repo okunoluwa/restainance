@@ -8,11 +8,12 @@
 body {
     background: #f5f5f5;
     padding-bottom: 70px;
-    transition: background 0.3s;
+    transition: background 0.3s, color 0.3s;
 }
 
 body.dark-mode {
     background: #121212;
+    color: #e0e0e0;
 }
 
 .container {
@@ -21,7 +22,7 @@ body.dark-mode {
     min-height: 100vh;
 }
 
-/* BOTTOM NAVIGATION */
+/* ========== SIDEBAR - STATIONARY ON DESKTOP (SAME AS OTHER PAGES) ========== */
 .sidebar {
     position: fixed;
     bottom: 0;
@@ -63,19 +64,23 @@ body.dark-mode .sidebar {
     align-items: center;
     gap: 4px;
     padding: 8px 0;
+    transition: color 0.3s;
 }
 
-.sidebar a::before {
-    font-size: 20px;
+body.dark-mode .sidebar a {
+    color: #aaa;
 }
 
-.sidebar li:nth-child(1) a::before { content: ""; }
-.sidebar li:nth-child(2) a::before { content: ""; }
-.sidebar li:nth-child(3) a::before { content: ""; }
-.sidebar li:nth-child(4) a::before { content: ""; }
+.sidebar a i {
+    font-size: 16px;
+}
 
 .sidebar .active a {
     color: #8a8337;
+}
+
+body.dark-mode .sidebar .active a {
+    color: #c4a85c;
 }
 
 /* MAIN */
@@ -88,10 +93,17 @@ body.dark-mode .sidebar {
     font-size: 24px;
     color: #333;
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 body.dark-mode .main h1 {
-    color: #eee;
+    color: #ffffff;
+}
+
+.main h1 i {
+    color: #8a8337;
 }
 
 /* USER INFO BANNER */
@@ -117,7 +129,7 @@ body.dark-mode .main h1 {
     font-size: 13px;
 }
 
-/* FORM - CENTERED ON ALL SCREENS */
+/* FORM - CENTERED */
 form {
     background: white;
     padding: 25px;
@@ -130,11 +142,12 @@ form {
 }
 
 body.dark-mode form {
-    background: #1e1e2e;
+    background: #2a2a3e;
 }
 
 .form-group {
     margin-bottom: 18px;
+    width: 100%;
 }
 
 label {
@@ -146,7 +159,7 @@ label {
 }
 
 body.dark-mode label {
-    color: #aaa;
+    color: #cccccc;
 }
 
 input, textarea, select {
@@ -163,9 +176,9 @@ input, textarea, select {
 body.dark-mode input,
 body.dark-mode textarea,
 body.dark-mode select {
-    background: #2a2a3e;
+    background: #1e1e2e;
     border-color: #3a3a4e;
-    color: #eee;
+    color: #ffffff;
 }
 
 input:focus, textarea:focus, select:focus {
@@ -175,7 +188,7 @@ input:focus, textarea:focus, select:focus {
 
 body.dark-mode input:focus,
 body.dark-mode textarea:focus {
-    background: #1e1e2e;
+    background: #2a2a3e;
 }
 
 textarea {
@@ -192,7 +205,7 @@ small {
 }
 
 body.dark-mode small {
-    color: #777;
+    color: #888;
 }
 
 button {
@@ -213,33 +226,137 @@ button:active {
     transform: scale(0.97);
 }
 
+body.dark-mode button {
+    background: #c4a85c;
+}
+
 /* FOOTER */
 footer {
     display: none;
 }
 
+/* ========== DESKTOP STYLES - STATIONARY SIDEBAR ========== */
 @media (min-width: 768px) {
-    body { padding-bottom: 0; }
-    .container { flex-direction: row; }
+    body { 
+        padding-bottom: 0; 
+        overflow-x: hidden;
+    }
+    
+    .container { 
+        flex-direction: row; 
+        min-height: 100vh;
+    }
+    
+    /* SIDEBAR - STATIONARY (SAME AS OTHER PAGES) */
     .sidebar {
-        position: relative;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
         width: 260px;
         height: 100vh;
         border-radius: 0;
         padding: 30px 20px;
-        bottom: auto;
+        box-shadow: 2px 0 20px rgba(0,0,0,0.05);
+        overflow-y: auto;
+        z-index: 100;
     }
+    
+    body.dark-mode .sidebar {
+        box-shadow: 2px 0 20px rgba(0,0,0,0.2);
+    }
+    
+    .sidebar::-webkit-scrollbar {
+        width: 4px;
+    }
+    
+    .sidebar::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    
+    .sidebar::-webkit-scrollbar-thumb {
+        background: #8a8337;
+        border-radius: 4px;
+    }
+    
     .sidebar h2 {
         display: block;
         font-size: 20px;
         margin-bottom: 30px;
         color: #333;
+        font-weight: 600;
+        padding-bottom: 12px;
+        border-bottom: 2px solid rgba(138, 131, 55, 0.3);
     }
-    body.dark-mode .sidebar h2 { color: #eee; }
-    .sidebar ul { flex-direction: column; align-items: stretch; }
-    .sidebar a { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 12px 16px; font-size: 13px; }
-    .main { padding: 30px; }
-    /* Desktop - form already centered with max-width and margin auto */
+    
+    body.dark-mode .sidebar h2 { 
+        color: #fff; 
+    }
+    
+    .sidebar h2 i {
+        color: #8a8337;
+        margin-right: 8px;
+    }
+    
+    .sidebar ul { 
+        flex-direction: column; 
+        align-items: stretch; 
+        gap: 5px;
+    }
+    
+    .sidebar li {
+        text-align: left;
+        width: 100%;
+    }
+    
+    .sidebar a { 
+        flex-direction: row; 
+        justify-content: flex-start; 
+        gap: 12px; 
+        padding: 12px 16px; 
+        font-size: 13px;
+        font-weight: 500;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+    
+    .sidebar a i { 
+        font-size: 18px; 
+        width: 24px;
+    }
+    
+    .sidebar a:hover {
+        background: rgba(138, 131, 55, 0.1);
+        transform: translateX(5px);
+    }
+    
+    body.dark-mode .sidebar a:hover {
+        background: rgba(196, 168, 92, 0.15);
+    }
+    
+    .sidebar .active a {
+        background: rgba(138, 131, 55, 0.12);
+        color: #8a8337;
+        font-weight: 600;
+    }
+    
+    body.dark-mode .sidebar .active a {
+        background: rgba(196, 168, 92, 0.2);
+    }
+    
+    /* MAIN CONTENT - SCROLLS, PUSHED RIGHT */
+    .main { 
+        margin-left: 260px;
+        padding: 30px;
+        flex: 1;
+        min-height: 100vh;
+        overflow-y: auto;
+    }
+    
+    form {
+        max-width: 550px;
+    }
+    
     footer {
         display: block;
         text-align: center;
@@ -247,10 +364,12 @@ footer {
         font-size: 12px;
         background: white;
         color: #888;
+        margin-left: 260px;
     }
+    
     body.dark-mode footer {
         background: #1e1e2e;
-        color: #666;
+        color: #aaaaaa;
     }
 }
 
@@ -276,6 +395,14 @@ footer {
         max-width: 100%;
         margin: 0 auto;
         padding: 20px;
+    }
+    
+    .main {
+        margin-left: 0;
+    }
+    
+    footer {
+        margin-left: 0;
     }
 }
 
@@ -336,8 +463,8 @@ html, body {
 }
 
 body.dark-mode .dark-mode-toggle {
-    background: #1e1e2e !important;
-    color: #eee !important;
+    background: #2a2a3e !important;
+    color: #ffffff !important;
 }
 
 @media (max-width: 768px) {
@@ -353,13 +480,13 @@ body.dark-mode .dark-mode-toggle {
 body.dark-mode input#studentNumber,
 body.dark-mode input#studentNumber:focus,
 body.dark-mode input#studentNumber[readonly] {
-    background-color: #2a2a3e !important;
+    background-color: #1e1e2e !important;
     color: #ffffff !important;
     border: 1px solid #3a3a4e !important;
 }
 
 body.dark-mode input[readonly] {
-    background-color: #2a2a3e !important;
+    background-color: #1e1e2e !important;
     color: #ffffff !important;
 }
 
