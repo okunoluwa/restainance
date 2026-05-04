@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Management - Restainance</title>
+    <link rel="stylesheet" href="finance.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h2><i class="fas fa-tools"></i> Restainance Admin</h2>
+        <ul>
+            <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li class="active"><a href="finance.html"><i class="fas fa-chart-line"></i> Finance</a></li>
+            <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <li><a href="#" id="darkModeSidebarBtn"><i class="fas fa-moon"></i> Dark Mode</a></li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+        <h1><i class="fas fa-chart-line"></i> Financial Management</h1>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="card balance">
+                <i class="fas fa-wallet"></i>
+                <h3>Total Balance</h3>
+                <p id="totalBalance">R0.00</p>
+            </div>
+            <div class="card income">
+                <i class="fas fa-arrow-up"></i>
+                <h3>Total Income</h3>
+                <p id="totalIncome">R0.00</p>
+            </div>
+            <div class="card expense">
+                <i class="fas fa-arrow-down"></i>
+                <h3>Total Expenses</h3>
+                <p id="totalExpense">R0.00</p>
+            </div>
+        </div>
+
+        <!-- Add Transaction Form -->
+        <div class="form-container">
+            <h3><i class="fas fa-plus-circle"></i> Add New Transaction</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> Transaction Type</label>
+                    <select id="transType">
+                        <option value="income"><i class="fas fa-arrow-up"></i> Income (Money In)</option>
+                        <option value="expense"><i class="fas fa-arrow-down"></i> Expense (Money Out)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-folder"></i> Category</label>
+                    <select id="transCategory">
+                        <optgroup label="INCOME">
+                            <option value="Rent Collection"><i class="fas fa-home"></i> Rent Collection</option>
+                            <option value="Deposits"><i class="fas fa-money-bill-wave"></i> Deposits</option>
+                            <option value="Maintenance Fees"><i class="fas fa-tools"></i> Maintenance Fees</option>
+                            <option value="Other Income"><i class="fas fa-chart-line"></i> Other Income</option>
+                        </optgroup>
+                        <optgroup label="EXPENSES">
+                            <option value="Repairs"><i class="fas fa-hammer"></i> Repairs & Maintenance</option>
+                            <option value="Utilities"><i class="fas fa-bolt"></i> Utilities (Water/Electricity)</option>
+                            <option value="Cleaning"><i class="fas fa-broom"></i> Cleaning Services</option>
+                            <option value="Staff Salaries"><i class="fas fa-user-tie"></i> Staff Salaries</option>
+                            <option value="Equipment"><i class="fas fa-tools"></i> Equipment Purchase</option>
+                            <option value="Other Expense"><i class="fas fa-chart-line"></i> Other Expense</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-dollar-sign"></i> Amount (R)</label>
+                    <input type="number" id="transAmount" placeholder="0.00" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-calendar"></i> Date</label>
+                    <input type="date" id="transDate">
+                </div>
+                <div class="form-group full-width">
+                    <label><i class="fas fa-align-left"></i> Description (Optional)</label>
+                    <textarea id="transDescription" rows="2" placeholder="Enter additional details..."></textarea>
+                </div>
+                <button id="addTransactionBtn"><i class="fas fa-save"></i> Add Transaction</button>
+            </div>
+        </div>
+
+        <!-- Filter and Export -->
+        <div class="toolbar">
+            <div class="filter-group">
+                <label><i class="fas fa-filter"></i> Filter by:</label>
+                <select id="filterType">
+                    <option value="all"><i class="fas fa-list"></i> All Transactions</option>
+                    <option value="income"><i class="fas fa-arrow-up"></i> Income Only</option>
+                    <option value="expense"><i class="fas fa-arrow-down"></i> Expenses Only</option>
+                </select>
+            </div>
+            <div class="search-group">
+                <input type="text" id="searchTransaction" placeholder="Search transactions...">
+                <button id="exportFinancePDF"><i class="fas fa-file-pdf"></i> Export Report</button>
+            </div>
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="table-container">
+            <h3><i class="fas fa-list"></i> Transaction History</h3>
+            <div class="table-wrapper">
+                <table id="transactionsTable">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-calendar"></i> Date</th>
+                            <th><i class="fas fa-tag"></i> Type</th>
+                            <th><i class="fas fa-folder"></i> Category</th>
+                            <th><i class="fas fa-align-left"></i> Description</th>
+                            <th><i class="fas fa-dollar-sign"></i> Amount</th>
+                            <th><i class="fas fa-cog"></i> Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsList">
+                        <tr><td colspan="6" style="text-align:center;"><i class="fas fa-spinner fa-pulse"></i> Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-section">
+            <h3><i class="fas fa-chart-bar"></i> Financial Overview by Category</h3>
+            <div class="chart-container">
+                <canvas id="financeChart"></canvas>
+            </div>
+        </div>
+    </main>
+</div>
+
+<footer>
+    <p><i class="far fa-copyright"></i> 2026 Restainance | Student Residence Maintenance App</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="finance.js"></script>
+</body>
+</html>

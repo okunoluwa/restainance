@@ -48,14 +48,14 @@ function updateAssignment(id, assignedStaff) {
         assignedDate: new Date().toLocaleString() 
     } : req);
     saveRequests(requests);
-    renderRequests();
+    renderFilteredRequests();
 }
 
 function updateStatus(id, newStatus) {
     let requests = getRequests();
     requests = requests.map(req => req.id === id ? { ...req, status: newStatus } : req);
     saveRequests(requests);
-    renderRequests();
+    renderFilteredRequests();
 }
 
 function exportToPDF() {
@@ -83,7 +83,6 @@ function addExportButtonAtBottom() {
     const existingBtn = document.querySelector('.export-btn-bottom');
     if (existingBtn) existingBtn.remove();
     
-    // Check if there are requests before adding button
     const requests = getRequests();
     if (requests.length === 0) return;
     
@@ -106,19 +105,62 @@ function escapeHtml(str) {
     });
 }
 
-function renderRequests() {
+// ========== SEARCH AND FILTER FUNCTIONS ==========
+
+function filterAndSearchRequests() {
+    const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
+    const statusFilter = document.getElementById('statusFilter')?.value || 'all';
+    const assignedFilter = document.getElementById('assignedFilter')?.value || 'all';
+    
+    const allRequests = getRequests();
+    
+    let filteredRequests = [...allRequests];
+    
+    // Filter by search term (title, student number, room, description)
+    if (searchTerm) {
+        filteredRequests = filteredRequests.filter(req => 
+            req.title.toLowerCase().includes(searchTerm) ||
+            (req.studentNumber && req.studentNumber.toLowerCase().includes(searchTerm)) ||
+            (req.room && req.room.toLowerCase().includes(searchTerm)) ||
+            (req.description && req.description.toLowerCase().includes(searchTerm))
+        );
+    }
+    
+    // Filter by status
+    if (statusFilter !== 'all') {
+        filteredRequests = filteredRequests.filter(req => req.status === statusFilter);
+    }
+    
+    // Filter by assignment status
+    if (assignedFilter === 'assigned') {
+        filteredRequests = filteredRequests.filter(req => req.assignedTo && req.assignedTo !== '');
+    } else if (assignedFilter === 'unassigned') {
+        filteredRequests = filteredRequests.filter(req => !req.assignedTo || req.assignedTo === '');
+    }
+    
+    // Update request count display
+    const requestCountSpan = document.getElementById('requestCount');
+    if (requestCountSpan) {
+        requestCountSpan.textContent = filteredRequests.length;
+    }
+    
+    return filteredRequests;
+}
+
+function renderFilteredRequests() {
     const container = document.getElementById("requestsContainer");
-    const requests = getRequests();
+    const filteredRequests = filterAndSearchRequests();
     const staffList = getStaffList();
     
     if (!container) return;
-    if (requests.length === 0) {
-        container.innerHTML = '<div class="no-requests"><i class="fas fa-inbox"></i> No requests</div>';
+    
+    if (filteredRequests.length === 0) {
+        container.innerHTML = '<div class="no-requests"><i class="fas fa-inbox"></i> No requests match your filters</div>';
         return;
     }
     
     container.innerHTML = '';
-    [...requests].reverse().forEach(req => {
+    [...filteredRequests].reverse().forEach(req => {
         const card = document.createElement("div");
         card.className = "request-card";
         
@@ -158,8 +200,47 @@ function renderRequests() {
         container.appendChild(card);
     });
     
-    // Add export button at the bottom (only if requests exist)
     addExportButtonAtBottom();
+}
+
+// Override the original renderRequests to use filtered version
+function renderRequests() {
+    renderFilteredRequests();
+}
+
+// Add event listeners for search and filters
+function initFilters() {
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const assignedFilter = document.getElementById('assignedFilter');
+    const clearBtn = document.getElementById('clearFilters');
+    
+    if (searchInput) {
+        searchInput.addEventListener('keyup', function() {
+            renderFilteredRequests();
+        });
+    }
+    
+    if (statusFilter) {
+        statusFilter.addEventListener('change', function() {
+            renderFilteredRequests();
+        });
+    }
+    
+    if (assignedFilter) {
+        assignedFilter.addEventListener('change', function() {
+            renderFilteredRequests();
+        });
+    }
+    
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+            if (searchInput) searchInput.value = '';
+            if (statusFilter) statusFilter.value = 'all';
+            if (assignedFilter) assignedFilter.value = 'all';
+            renderFilteredRequests();
+        });
+    }
 }
 
 window.updateAssignment = updateAssignment;
@@ -167,7 +248,8 @@ window.updateStatus = updateStatus;
 
 document.addEventListener("DOMContentLoaded", function() {
     initDarkMode();
-    renderRequests();
+    initFilters();
+    renderFilteredRequests();
     
     (function displayAdminName() {
         const userData = localStorage.getItem('user');

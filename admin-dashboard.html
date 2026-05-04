@@ -15,7 +15,8 @@
         <h2><i class="fas fa-tools"></i> Restainance Admin</h2>
 
         <ul>
-            <li class="active"><a href="#"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="finance.html"><i class="fas fa-chart-line"></i> Finance</a></li>
             <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             <li><a href="#" id="darkModeSidebarBtn"><i class="fas fa-moon"></i> Dark Mode</a></li>
         </ul>
@@ -25,6 +26,35 @@
     <main class="main">
 
         <h1><i class="fas fa-clipboard-list"></i> All Maintenance Requests</h1>
+
+        <!-- SEARCH AND FILTER SECTION -->
+        <div class="filter-section">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search by title, student number, room, or description...">
+            </div>
+            
+            <div class="filter-box">
+                <select id="statusFilter">
+                    <option value="all">📋 All Status</option>
+                    <option value="pending">⏳ Pending</option>
+                    <option value="inprogress">🔄 In Progress</option>
+                    <option value="completed">✅ Completed</option>
+                </select>
+                
+                <select id="assignedFilter">
+                    <option value="all">👥 All Assignments</option>
+                    <option value="assigned">✓ Assigned</option>
+                    <option value="unassigned">✗ Unassigned</option>
+                </select>
+                
+                <button id="clearFilters" class="clear-btn"><i class="fas fa-times"></i> Clear Filters</button>
+            </div>
+            
+            <div class="stats-badge">
+                <span id="requestCount">0</span> requests found
+            </div>
+        </div>
 
         <div id="requestsContainer"></div>
 

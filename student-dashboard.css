@@ -22,22 +22,23 @@ body.dark-mode {
     min-height: 100vh;
 }
 
-/* BOTTOM NAVIGATION */
+/* ========== SIDEBAR - STATIONARY ON DESKTOP ========== */
 .sidebar {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     background: white;
-    padding: 8px 20px;
-    box-shadow: 0 -2px 20px rgba(0,0,0,0.1);
+    padding: 12px 20px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
     border-radius: 25px 25px 0 0;
     z-index: 100;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
 }
 
 body.dark-mode .sidebar {
     background: #1e1e2e;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
 }
 
 .sidebar h2 {
@@ -62,36 +63,37 @@ body.dark-mode .sidebar {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     padding: 8px 0;
-    transition: color 0.3s;
+    transition: all 0.3s ease;
+    border-radius: 12px;
 }
 
 body.dark-mode .sidebar a {
     color: #aaa;
 }
 
-.sidebar a::before {
+.sidebar a i {
     font-size: 20px;
+    transition: transform 0.2s ease;
 }
 
-.sidebar li:nth-child(1) a::before { content: ""; }
-.sidebar li:nth-child(2) a::before { content: ""; }
-.sidebar li:nth-child(3) a::before { content: ""; }
-.sidebar li:nth-child(4) a::before { content: ""; }
+.sidebar a:hover i {
+    transform: translateY(-2px);
+}
 
 .sidebar .active a {
     color: #af954c;
+    font-weight: 600;
 }
 
-body.dark-mode .sidebar .active a {
-    color: #c4a85c;
-}
-
-/* MAIN */
+/* ========== MAIN ========== */
 .main {
     padding: 20px;
     padding-bottom: 80px;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 .top-bar {
@@ -100,16 +102,26 @@ body.dark-mode .sidebar .active a {
     align-items: center;
     margin-bottom: 20px;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 15px;
 }
 
 .top-bar h1 {
-    font-size: 24px;
+    font-size: 1.5rem;
     color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    word-break: break-word;
 }
 
 body.dark-mode .top-bar h1 {
     color: #ffffff;
+}
+
+.top-bar h1 i {
+    color: #af954c;
+    font-size: 1.4rem;
 }
 
 .top-bar button {
@@ -117,12 +129,13 @@ body.dark-mode .top-bar h1 {
     color: white;
     border: none;
     border-radius: 30px;
-    padding: 12px 20px;
-    font-size: 14px;
+    padding: 10px 18px;
+    font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(175,149,76,0.3);
     transition: transform 0.2s;
+    white-space: nowrap;
 }
 
 .top-bar button:active {
@@ -136,6 +149,7 @@ body.dark-mode .top-bar h1 {
     margin: 20px 0;
     overflow-x: auto;
     scrollbar-width: none;
+    flex-wrap: wrap;
 }
 
 .stats::-webkit-scrollbar {
@@ -147,9 +161,10 @@ body.dark-mode .top-bar h1 {
     padding: 18px 20px;
     border-radius: 20px;
     min-width: 130px;
+    flex: 1;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    transition: background 0.3s;
+    transition: all 0.3s ease;
 }
 
 body.dark-mode .card {
@@ -157,9 +172,11 @@ body.dark-mode .card {
 }
 
 .card h3 {
-    font-size: 13px;
+    font-size: 0.8rem;
     color: #888;
     margin-bottom: 8px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
 }
 
 body.dark-mode .card h3 {
@@ -167,9 +184,10 @@ body.dark-mode .card h3 {
 }
 
 .card p {
-    font-size: 28px;
+    font-size: 1.8rem;
     font-weight: bold;
     color: #af954c;
+    line-height: 1.2;
 }
 
 body.dark-mode .card p {
@@ -177,13 +195,54 @@ body.dark-mode .card p {
 }
 
 .requests h2 {
-    font-size: 18px;
+    font-size: 1.2rem;
     margin: 20px 0 15px;
     color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 body.dark-mode .requests h2 {
     color: #ffffff;
+}
+
+.requests h2 i {
+    color: #af954c;
+    font-size: 1.1rem;
+}
+
+/* SEARCH */
+#searchContainer {
+    margin: 15px 0;
+    width: 100%;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 30px;
+    border: 1.5px solid #e8e8e8;
+    background: #fafafa;
+    font-size: 0.95rem;
+    margin: 0;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode #searchInput {
+    background: #2a2a3e;
+    border-color: #3a3a4e;
+    color: #ffffff;
+}
+
+body.dark-mode #searchInput::placeholder {
+    color: #aaaaaa;
+}
+
+#searchInput:focus {
+    border-color: #af954c;
+    box-shadow: 0 0 0 3px rgba(175, 149, 76, 0.1);
 }
 
 /* REQUEST CARDS */
@@ -194,7 +253,8 @@ body.dark-mode .requests h2 {
     border-radius: 16px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     border-left: 4px solid #af954c;
-    transition: background 0.3s, transform 0.2s;
+    transition: all 0.3s ease;
+    width: 100%;
 }
 
 .request-card:active {
@@ -206,13 +266,14 @@ body.dark-mode .request-card {
 }
 
 .request-card h3 {
-    font-size: 16px;
-    margin-bottom: 8px;
+    font-size: 1rem;
+    margin-bottom: 10px;
     color: #333;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     gap: 8px;
+    word-break: break-word;
 }
 
 body.dark-mode .request-card h3 {
@@ -220,13 +281,20 @@ body.dark-mode .request-card h3 {
 }
 
 .request-card p {
-    font-size: 13px;
+    font-size: 0.85rem;
     color: #666;
-    margin: 6px 0;
+    margin: 8px 0;
+    line-height: 1.4;
+    word-break: break-word;
 }
 
 body.dark-mode .request-card p {
     color: #cccccc;
+}
+
+.request-card p i {
+    width: 22px;
+    color: #af954c;
 }
 
 /* STATUS BADGES */
@@ -234,7 +302,7 @@ body.dark-mode .request-card p {
     display: inline-block;
     padding: 5px 12px;
     border-radius: 20px;
-    font-size: 11px;
+    font-size: 0.7rem;
     font-weight: bold;
     margin-top: 8px;
 }
@@ -269,27 +337,59 @@ body.dark-mode .completed {
     color: #81c784;
 }
 
-/* SEARCH */
-#searchInput {
-    width: 100%;
-    padding: 14px 18px;
-    border-radius: 30px;
-    border: 1px solid #ddd;
-    background: white;
-    font-size: 15px;
-    margin: 15px 0;
-    outline: none;
-    transition: background 0.3s, color 0.3s;
+/* BUTTONS INSIDE CARDS */
+.request-card .btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    flex-wrap: wrap;
 }
 
-body.dark-mode #searchInput {
-    background: #2a2a3e;
-    border-color: #3a3a4e;
-    color: #ffffff;
+.request-card button {
+    flex: 1;
+    min-width: 120px;
+    padding: 10px 12px;
+    border-radius: 25px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
-body.dark-mode #searchInput::placeholder {
-    color: #aaaaaa;
+.request-card button:hover {
+    transform: translateY(-2px);
+}
+
+.btn-view {
+    background: #af954c;
+    color: white;
+}
+
+.btn-view:hover {
+    background: #9a8038;
+}
+
+.btn-export {
+    background: #4caf50;
+    color: white;
+}
+
+.btn-export:hover {
+    background: #3e8e41;
+}
+
+.btn-delete {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #c82333;
 }
 
 /* EXPORT BUTTON */
@@ -299,10 +399,16 @@ body.dark-mode #searchInput::placeholder {
     border: none;
     border-radius: 30px;
     padding: 10px 18px;
-    font-size: 13px;
+    font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
     margin-left: 10px;
+    transition: all 0.3s ease;
+}
+
+.export-btn:hover {
+    background: #3e8e41;
+    transform: translateY(-2px);
 }
 
 /* DARK MODE TOGGLE */
@@ -315,7 +421,7 @@ body.dark-mode #searchInput::placeholder {
     border: none;
     border-radius: 30px;
     padding: 8px 16px;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 600;
     cursor: pointer;
     z-index: 200;
@@ -332,42 +438,360 @@ footer {
     display: none;
 }
 
-@media (min-width: 768px) {
-    body { padding-bottom: 0; }
-    .container { flex-direction: row; }
+/* ========== DESKTOP STYLES ========== */
+@media (min-width: 1024px) {
+    body { 
+        padding-bottom: 0; 
+        overflow-x: hidden;
+    }
+    
+    .container { 
+        flex-direction: row; 
+        min-height: 100vh;
+    }
+    
+    /* SIDEBAR - STATIONARY */
     .sidebar {
-        position: relative;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
         width: 260px;
         height: 100vh;
         border-radius: 0;
         padding: 30px 20px;
-        bottom: auto;
+        box-shadow: 2px 0 20px rgba(0,0,0,0.05);
+        overflow-y: auto;
+        z-index: 100;
     }
+    
+    body.dark-mode .sidebar {
+        box-shadow: 2px 0 20px rgba(0,0,0,0.2);
+    }
+    
+    .sidebar::-webkit-scrollbar {
+        width: 4px;
+    }
+    
+    .sidebar::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    
+    .sidebar::-webkit-scrollbar-thumb {
+        background: #af954c;
+        border-radius: 4px;
+    }
+    
     .sidebar h2 {
         display: block;
-        font-size: 20px;
+        font-size: 1.25rem;
         margin-bottom: 30px;
         color: #333;
+        font-weight: 600;
+        padding-bottom: 12px;
+        border-bottom: 2px solid rgba(175, 149, 76, 0.3);
     }
-    body.dark-mode .sidebar h2 { color: #ffffff; }
-    .sidebar ul { flex-direction: column; align-items: stretch; }
-    .sidebar a { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 12px 16px; font-size: 13px; }
-    .sidebar a::before { font-size: 18px; }
-    .main { padding: 30px; padding-bottom: 30px; }
-    .stats { overflow-x: visible; }
+    
+    body.dark-mode .sidebar h2 { 
+        color: #fff; 
+    }
+    
+    .sidebar h2 i {
+        color: #af954c;
+        margin-right: 8px;
+    }
+    
+    .sidebar ul { 
+        flex-direction: column; 
+        align-items: stretch; 
+        gap: 5px;
+    }
+    
+    .sidebar li {
+        text-align: left;
+        width: 100%;
+    }
+    
+    .sidebar a { 
+        flex-direction: row; 
+        justify-content: flex-start; 
+        gap: 12px; 
+        padding: 12px 16px; 
+        font-size: 0.85rem;
+        font-weight: 500;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+    
+    .sidebar a i { 
+        font-size: 1.1rem; 
+        width: 24px;
+    }
+    
+    .sidebar a:hover {
+        background: rgba(175, 149, 76, 0.1);
+        transform: translateX(5px);
+    }
+    
+    body.dark-mode .sidebar a:hover {
+        background: rgba(196, 168, 92, 0.15);
+    }
+    
+    .sidebar .active a {
+        background: rgba(175, 149, 76, 0.12);
+        color: #af954c;
+        font-weight: 600;
+    }
+    
+    body.dark-mode .sidebar .active a {
+        background: rgba(196, 168, 92, 0.2);
+    }
+    
+    /* MAIN CONTENT - SCROLLS */
+    .main { 
+        margin-left: 260px;
+        padding: 30px;
+        flex: 1;
+        min-height: 100vh;
+        overflow-y: auto;
+        width: calc(100% - 260px);
+    }
+    
+    .stats {
+        gap: 20px;
+        flex-wrap: nowrap;
+    }
+    
+    .card {
+        min-width: 150px;
+    }
+    
     footer {
         display: block;
         text-align: center;
         padding: 15px;
-        font-size: 12px;
-        color: #888;
+        font-size: 0.75rem;
         background: white;
+        color: #888;
+        margin-left: 260px;
     }
+    
     body.dark-mode footer {
         background: #1e1e2e;
         color: #aaaaaa;
     }
+    
     .dark-mode-toggle { top: 20px; right: 20px; }
+}
+
+/* ========== TABLET STYLES ========== */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .main {
+        padding: 20px;
+    }
+    
+    .top-bar h1 {
+        font-size: 1.3rem;
+    }
+    
+    .card p {
+        font-size: 1.5rem;
+    }
+    
+    .stats {
+        gap: 12px;
+    }
+    
+    .card {
+        min-width: 120px;
+        padding: 15px;
+    }
+}
+
+/* ========== MOBILE STYLES ========== */
+@media (max-width: 767px) {
+    .sidebar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        width: auto;
+        height: auto;
+        border-radius: 25px 25px 0 0;
+        padding: 10px 15px;
+    }
+    
+    .sidebar h2 {
+        display: none;
+    }
+    
+    .sidebar ul {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: row;
+    }
+    
+    .sidebar li {
+        text-align: center;
+    }
+    
+    .sidebar a {
+        flex-direction: column;
+        padding: 6px 0;
+        font-size: 0.7rem;
+    }
+    
+    .sidebar a i {
+        font-size: 1.1rem;
+        width: auto;
+    }
+    
+    .main {
+        margin-left: 0;
+        padding: 15px;
+        padding-bottom: 80px;
+    }
+    
+    .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .top-bar h1 {
+        font-size: 1.3rem;
+    }
+    
+    .top-bar button {
+        width: 100%;
+        white-space: normal;
+        text-align: center;
+    }
+    
+    .stats {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .card {
+        width: 100%;
+        padding: 15px;
+    }
+    
+    .card p {
+        font-size: 1.6rem;
+    }
+    
+    .request-card {
+        padding: 14px;
+    }
+    
+    .request-card h3 {
+        font-size: 0.95rem;
+    }
+    
+    .request-card p {
+        font-size: 0.8rem;
+    }
+    
+    .request-card .btn-group {
+        flex-direction: column;
+    }
+    
+    .request-card button {
+        width: 100%;
+    }
+    
+    footer {
+        margin-left: 0;
+    }
+}
+
+/* ========== SMALL MOBILE STYLES ========== */
+@media (max-width: 480px) {
+    .main {
+        padding: 12px;
+        padding-bottom: 80px;
+    }
+    
+    .main h1 {
+        font-size: 1.2rem;
+    }
+    
+    .top-bar h1 {
+        font-size: 1.1rem;
+    }
+    
+    .card h3 {
+        font-size: 0.7rem;
+    }
+    
+    .card p {
+        font-size: 1.3rem;
+    }
+    
+    .requests h2 {
+        font-size: 1rem;
+    }
+    
+    .request-card {
+        padding: 12px;
+    }
+    
+    .request-card h3 {
+        font-size: 0.9rem;
+    }
+    
+    .request-card p {
+        font-size: 0.75rem;
+    }
+    
+    .status {
+        font-size: 0.65rem;
+        padding: 4px 10px;
+    }
+    
+    .request-card button {
+        font-size: 0.7rem;
+        padding: 8px 12px;
+    }
+    
+    #searchInput {
+        padding: 12px 15px;
+        font-size: 0.85rem;
+    }
+}
+
+/* ========== EXTRA SMALL MOBILE ========== */
+@media (max-width: 360px) {
+    .top-bar h1 {
+        font-size: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+    
+    .card p {
+        font-size: 1.1rem;
+    }
+    
+    .request-card h3 {
+        font-size: 0.85rem;
+    }
+    
+    .sidebar a {
+        font-size: 0.6rem;
+    }
+    
+    .sidebar a i {
+        font-size: 1rem;
+    }
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 /* ========== FIX FOR MODAL POPUP IN DARK MODE ========== */

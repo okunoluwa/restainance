@@ -8,12 +8,11 @@
 body {
     background: #f5f5f5;
     padding-bottom: 70px;
-    transition: background 0.3s, color 0.3s;
+    transition: background 0.3s;
 }
 
 body.dark-mode {
     background: #121212;
-    color: #e0e0e0;
 }
 
 .container {
@@ -66,10 +65,6 @@ body.dark-mode .sidebar {
     padding: 8px 0;
 }
 
-body.dark-mode .sidebar a {
-    color: #aaa;
-}
-
 .sidebar a::before {
     font-size: 20px;
 }
@@ -81,10 +76,6 @@ body.dark-mode .sidebar a {
 
 .sidebar .active a {
     color: #8a8337;
-}
-
-body.dark-mode .sidebar .active a {
-    color: #c4a85c;
 }
 
 /* MAIN */
@@ -100,7 +91,7 @@ body.dark-mode .sidebar .active a {
 }
 
 body.dark-mode .main h1 {
-    color: #ffffff;
+    color: #eee;
 }
 
 /* USER INFO BANNER */
@@ -126,17 +117,20 @@ body.dark-mode .main h1 {
     font-size: 13px;
 }
 
-/* FORM */
+/* FORM - CENTERED ON ALL SCREENS */
 form {
     background: white;
     padding: 25px;
     border-radius: 24px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     transition: background 0.3s;
+    max-width: 550px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 body.dark-mode form {
-    background: #2a2a3e;
+    background: #1e1e2e;
 }
 
 .form-group {
@@ -152,7 +146,7 @@ label {
 }
 
 body.dark-mode label {
-    color: #cccccc;
+    color: #aaa;
 }
 
 input, textarea, select {
@@ -169,14 +163,9 @@ input, textarea, select {
 body.dark-mode input,
 body.dark-mode textarea,
 body.dark-mode select {
-    background: #1e1e2e;
+    background: #2a2a3e;
     border-color: #3a3a4e;
-    color: #ffffff;
-}
-
-body.dark-mode input::placeholder,
-body.dark-mode textarea::placeholder {
-    color: #aaaaaa;
+    color: #eee;
 }
 
 input:focus, textarea:focus, select:focus {
@@ -186,8 +175,7 @@ input:focus, textarea:focus, select:focus {
 
 body.dark-mode input:focus,
 body.dark-mode textarea:focus {
-    background: #2a2a3e;
-    border-color: #c4a85c;
+    background: #1e1e2e;
 }
 
 textarea {
@@ -204,7 +192,7 @@ small {
 }
 
 body.dark-mode small {
-    color: #888;
+    color: #777;
 }
 
 button {
@@ -223,10 +211,6 @@ button {
 
 button:active {
     transform: scale(0.97);
-}
-
-body.dark-mode button {
-    background: #c4a85c;
 }
 
 /* FOOTER */
@@ -251,11 +235,11 @@ footer {
         margin-bottom: 30px;
         color: #333;
     }
-    body.dark-mode .sidebar h2 { color: #ffffff; }
+    body.dark-mode .sidebar h2 { color: #eee; }
     .sidebar ul { flex-direction: column; align-items: stretch; }
     .sidebar a { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 12px 16px; font-size: 13px; }
     .main { padding: 30px; }
-    form { max-width: 550px; }
+    /* Desktop - form already centered with max-width and margin auto */
     footer {
         display: block;
         text-align: center;
@@ -266,7 +250,7 @@ footer {
     }
     body.dark-mode footer {
         background: #1e1e2e;
-        color: #aaaaaa;
+        color: #666;
     }
 }
 
@@ -285,6 +269,13 @@ footer {
     .sidebar a {
         font-size: 10px;
         padding: 5px 0;
+    }
+    
+    /* Mobile - form takes full width with small padding */
+    form {
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 20px;
     }
 }
 
@@ -345,8 +336,8 @@ html, body {
 }
 
 body.dark-mode .dark-mode-toggle {
-    background: #2a2a3e !important;
-    color: #ffffff !important;
+    background: #1e1e2e !important;
+    color: #eee !important;
 }
 
 @media (max-width: 768px) {
@@ -362,12 +353,12 @@ body.dark-mode .dark-mode-toggle {
 body.dark-mode input#studentNumber,
 body.dark-mode input#studentNumber:focus,
 body.dark-mode input#studentNumber[readonly] {
-    background-color: #1e1e2e !important;
+    background-color: #2a2a3e !important;
     color: #ffffff !important;
     border: 1px solid #3a3a4e !important;
 }
 
 body.dark-mode input[readonly] {
-    background-color: #1e1e2e !important;
+    background-color: #2a2a3e !important;
     color: #ffffff !important;
 }
