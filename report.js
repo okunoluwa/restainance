@@ -267,9 +267,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Handle image if uploaded
         if (imageFile) {
-            // Check file size (max 2MB)
-            if (imageFile.size > 2 * 1024 * 1024) {
-                alert('Image size must be less than 2MB. Please choose a smaller image.');
+            // Check file size (max 5MB)
+            if (imageFile.size > 5 * 1024 * 1024) {
+                alert('Image size must be less than 5MB. Please choose a smaller image.');
                 return;
             }
             
