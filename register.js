@@ -40,6 +40,26 @@ function initDarkMode() {
     document.body.appendChild(btn);
 }
 
+// Toggle password visibility
+function togglePassword(fieldId) {
+    const passwordInput = document.getElementById(fieldId);
+    const icon = passwordInput.parentElement.querySelector('i');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        if (icon) {
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    } else {
+        passwordInput.type = 'password';
+        if (icon) {
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        }
+    }
+}
+
 // Wait for DOM to fully load
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize dark mode
@@ -49,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('form');
     if (!form) {
         console.error('Registration form not found!');
-        alert('>Form not found. Please check your HTML.');
+        alert('Form not found. Please check the HTML.');
         return;
     }
     
@@ -57,14 +77,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
     const roleSelect = document.getElementById('role');
     const residenceInput = document.getElementById('residence');
     const roomInput = document.getElementById('room');
     const studentNumberInput = document.getElementById('studentNumber');
     
     // Validate required fields exist
-    if (!fullnameInput || !emailInput || !passwordInput || !roleSelect) {
-        console.error('Missing required form fields. Check IDs: fullname, email, password, role');
+    if (!fullnameInput || !emailInput || !passwordInput || !confirmPasswordInput || !roleSelect) {
+        console.error('Missing required form fields. Check IDs: fullname, email, password, confirmPassword, role');
         alert('Form is missing required fields. Please check the HTML.');
         return;
     }
@@ -77,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const fullname = fullnameInput.value.trim();
         const email = emailInput.value.trim();
         const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
         const role = roleSelect.value;
         const residence = residenceInput ? residenceInput.value.trim() : '';
         const room = roomInput ? roomInput.value.trim() : '';
@@ -107,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 3. Password validation (ALL roles)
         if (!password) {
-            alert(' Please enter a password.');
+            alert('Please enter a password.');
             passwordInput.focus();
             return;
         }
@@ -118,7 +140,14 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // 4. STUDENT-SPECIFIC VALIDATIONS (Student Number, Residence, Room)
+        // 4. Confirm Password validation (NEW)
+        if (password !== confirmPassword) {
+            alert('Passwords do not match. Please re-enter your password.');
+            confirmPasswordInput.focus();
+            return;
+        }
+        
+        // 5. STUDENT-SPECIFIC VALIDATIONS (Student Number, Residence, Room)
         // These are ONLY required if role is 'student'
         if (role === 'student') {
             // Student Number is required for students only
@@ -193,3 +222,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('Registration form ready. Only students need Student Number, Residence, and Room Number.');
 });
+
+// Make functions global
+window.togglePassword = togglePassword;
