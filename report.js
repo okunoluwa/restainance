@@ -1,5 +1,6 @@
 // report.js
 // Complete working version for student maintenance report submission
+// INCLUDES CAMERA CAPTURE FUNCTIONALITY
 
 // ========== DARK MODE FUNCTION (SIDEBAR BUTTON) ==========
 function initDarkMode() {
@@ -47,7 +48,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const studentNumberInput = document.getElementById('studentNumber');
     const descriptionTextarea = document.getElementById('description');
     const imageInput = document.getElementById('image');
+    const cameraInput = document.getElementById('cameraInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const cameraBtn = document.getElementById('cameraBtn');
+    const imagePreview = document.getElementById('imagePreview');
+    const imageNameSpan = document.getElementById('imageName');
+    const removeImageBtn = document.getElementById('removeImage');
     const submitBtn = document.getElementById('submitBtn');
+    
+    let currentImageFile = null;
     
     // Check if all form elements exist
     if (!form) {
@@ -87,6 +96,76 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('✅ All form elements found successfully!');
     
+    // ========== CAMERA AND UPLOAD FUNCTIONALITY ==========
+    
+    // Show preview function
+    function showPreview(file) {
+        if (file) {
+            imageNameSpan.textContent = file.name;
+            imagePreview.style.display = 'flex';
+            currentImageFile = file;
+            
+            // Create a FileList-like object for the file input
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            if (imageInput) imageInput.files = dataTransfer.files;
+        }
+    }
+    
+    // Hide preview
+    function hidePreview() {
+        imagePreview.style.display = 'none';
+        imageNameSpan.textContent = '';
+        currentImageFile = null;
+        if (imageInput) imageInput.value = '';
+    }
+    
+    // Upload from gallery button
+    if (uploadBtn) {
+        uploadBtn.addEventListener('click', function() {
+            imageInput.click();
+        });
+    }
+    
+    // Camera button
+    if (cameraBtn) {
+        cameraBtn.addEventListener('click', function() {
+            // Check if device supports camera
+            if (cameraInput) {
+                cameraInput.click();
+            } else {
+                alert('Camera not supported on this device. Please use file upload instead.');
+            }
+        });
+    }
+    
+    // Handle gallery file selection
+    if (imageInput) {
+        imageInput.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                showPreview(file);
+            }
+        });
+    }
+    
+    // Handle camera capture
+    if (cameraInput) {
+        cameraInput.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                showPreview(file);
+            }
+        });
+    }
+    
+    // Remove image button
+    if (removeImageBtn) {
+        removeImageBtn.addEventListener('click', function() {
+            hidePreview();
+        });
+    }
+    
     // Get student info from localStorage
     let studentName = localStorage.getItem('studentName') || '';
     let studentNumber = localStorage.getItem('studentNumber') || '';
@@ -113,10 +192,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Auto-fill the student number field and make it read-only
-    studentNumberInput.value = currentStudentNumber;
-    studentNumberInput.readOnly = true;
-    studentNumberInput.style.backgroundColor = '#f0f0f0';
-    studentNumberInput.style.cursor = 'not-allowed';
+    if (studentNumberInput) {
+        studentNumberInput.value = currentStudentNumber;
+        studentNumberInput.readOnly = true;
+        studentNumberInput.style.backgroundColor = '#f0f0f0';
+        studentNumberInput.style.cursor = 'not-allowed';
+    }
     
     // Get student name from user object if not already available
     if (!studentName) {
@@ -164,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const roomNumber = roomNumberInput.value.trim();
         const studentNumber = studentNumberInput.value.trim();
         const description = descriptionTextarea.value.trim();
-        const imageFile = imageInput.files[0];
+        const imageFile = currentImageFile || (imageInput ? imageInput.files[0] : null);
         
         console.log('Form submission started...');
         console.log('Title:', title);
@@ -299,8 +380,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('Request submitted successfully with image!');
                     form.reset();
                     // Restore student number after reset
-                    studentNumberInput.value = currentStudentNumber;
-                    studentNumberInput.readOnly = true;
+                    if (studentNumberInput) {
+                        studentNumberInput.value = currentStudentNumber;
+                        studentNumberInput.readOnly = true;
+                    }
+                    hidePreview();
                 } else {
                     alert('Failed to save request. Please try again.');
                 }
@@ -330,8 +414,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Request submitted successfully!');
                 form.reset();
                 // Restore student number after reset
-                studentNumberInput.value = currentStudentNumber;
-                studentNumberInput.readOnly = true;
+                if (studentNumberInput) {
+                    studentNumberInput.value = currentStudentNumber;
+                    studentNumberInput.readOnly = true;
+                }
+                hidePreview();
             } else {
                 alert('Failed to save request. Please try again.');
             }

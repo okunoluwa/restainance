@@ -37,12 +37,12 @@
                 <label><i class="fas fa-tag"></i> Category</label>
                 <select id="category" name="category" required>
                     <option value="">-- Select Category --</option>
-                    <option value="Plumbing"><i class="fas fa-tint"></i> Plumbing</option>
-                    <option value="Electrical"><i class="fas fa-bolt"></i> Electrical</option>
-                    <option value="Furniture"><i class="fas fa-chair"></i> Furniture</option>
-                    <option value="Cleaning"><i class="fas fa-broom"></i> Cleaning</option>
-                    <option value="HVAC"><i class="fas fa-wind"></i> HVAC/Air Conditioning</option>
-                    <option value="Other"><i class="fas fa-wrench"></i> Other</option>
+                    <option value="Plumbing">🔧 Plumbing</option>
+                    <option value="Electrical">⚡ Electrical</option>
+                    <option value="Furniture">🪑 Furniture</option>
+                    <option value="Cleaning">🧹 Cleaning</option>
+                    <option value="HVAC">🌬️ HVAC/Air Conditioning</option>
+                    <option value="Other">🔨 Other</option>
                 </select>
             </div>
 
@@ -61,9 +61,28 @@
                 <textarea id="description" name="description" rows="4" placeholder="Please describe the issue in detail..." required></textarea>
             </div>
 
+            <!-- IMAGE UPLOAD SECTION WITH CAMERA OPTION -->
             <div class="form-group">
-                <label><i class="fas fa-image"></i> Upload Image (Optional)</label>
-                <input type="file" id="image" name="image" accept="image/*">
+                <label><i class="fas fa-image"></i> Add Photo Evidence</label>
+                
+                <div class="image-options">
+                    <button type="button" id="uploadBtn" class="image-option-btn">
+                        <i class="fas fa-upload"></i> Upload from Gallery
+                    </button>
+                    <button type="button" id="cameraBtn" class="image-option-btn">
+                        <i class="fas fa-camera"></i> Take Photo
+                    </button>
+                </div>
+                
+                <input type="file" id="image" name="image" accept="image/*" style="display: none;">
+                <input type="file" id="cameraInput" name="camera" accept="image/*" capture="environment" style="display: none;">
+                
+                <div id="imagePreview" class="image-preview" style="display: none;">
+                    <i class="fas fa-image"></i>
+                    <span id="imageName"></span>
+                    <button type="button" id="removeImage" class="remove-image-btn"><i class="fas fa-times"></i></button>
+                </div>
+                
                 <small><i class="fas fa-info-circle"></i> Max size: 5MB. Supported formats: JPG, PNG, GIF</small>
             </div>
 
